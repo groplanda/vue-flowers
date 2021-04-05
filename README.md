@@ -5,6 +5,17 @@
 
 ## Vue October start template
 
-[October](https://octobercms.com) is a Content Management System (CMS) and web platform whose sole purpose is to make your development workflow simple again. It was born out of frustration with existing systems. We feel building websites has become a convoluted and confusing process that leaves developers unsatisfied. We want to turn you around to the simpler side and get back to basics.
+[October](https://octobercms.com) - CMS на основе laravel для создания сайтов
 
-October's mission is to show the world that web development is not rocket science.
+### В сборку вошло ###
+* Laravel mix
+* Vue.js, vue router, vuex
+* Pug и pug bem
+* Sass
+* postCss
+* browserSync
+* Svg Sprites
+
+### Be Happy ###
+
+<img src="./themes/demo/assets/images/theme-preview.png?raw=true" alt="October" width="100%" height="auto" />
