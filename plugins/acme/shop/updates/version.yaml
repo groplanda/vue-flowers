@@ -1,0 +1,38 @@
+1.0.1:
+    - 'Initialize plugin.'
+1.0.2:
+    - 'Created table acme_shop_product'
+    - builder_table_create_acme_shop_product.php
+1.0.3:
+    - 'Created table acme_shop_categories'
+    - builder_table_create_acme_shop_categories.php
+1.0.4:
+    - 'Created table acme_shop_product_categories'
+    - builder_table_create_acme_shop_product_categories.php
+1.0.5:
+    - 'Created table acme_shop_tags'
+    - builder_table_create_acme_shop_tags.php
+1.0.6:
+    - 'Created table acme_shop_product_tags'
+    - builder_table_create_acme_shop_product_tags.php
+1.0.7:
+    - 'Created table acme_shop_orders'
+    - builder_table_create_acme_shop_orders.php
+1.0.8:
+    - 'Updated table acme_shop_orders'
+    - builder_table_update_acme_shop_orders.php
+1.0.9:
+    - 'Updated table acme_shop_categories'
+    - builder_table_update_acme_shop_categories.php
+1.0.10:
+    - 'Updated table acme_shop_product'
+    - builder_table_update_acme_shop_product.php
+1.0.11:
+    - 'Updated table acme_shop_categories'
+    - builder_table_update_acme_shop_categories_2.php
+1.0.12:
+    - 'Updated table acme_shop_categories'
+    - builder_table_update_acme_shop_categories_3.php
+1.0.13:
+    - 'Updated table acme_shop_categories'
+    - builder_table_update_acme_shop_categories_4.php

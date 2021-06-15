@@ -1,0 +1,66 @@
+<template lang="pug">
+  transition(name="fade")
+    .product-popup(:class="movingClass")
+      router-link(:to="{name: 'cart'}")._link Товар добавлен в корзину!
+</template>
+<script>
+export default {
+  name: "ProductPopup",
+  props: {
+    moving: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    movingClass() {
+      return {
+        'product-popup--moving': this.moving
+      }
+    }
+  }
+}
+</script>
+<style lang="scss">
+@import '@/scss/vars.scss';
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0;
+}
+.product-popup {
+  width: 100%;
+  max-width: 220px;
+  padding: 10px 20px;
+  text-align: center;
+  background: $green;
+  box-shadow: 0px 4px 40px $shadow;
+  border-radius: 8px;
+
+  position: fixed;
+  top: 50px;
+  right: 30px;
+  z-index: 30;
+  transition: transform .3s ease;
+
+  &--moving {
+    transform: translateY(-150px);
+  }
+
+  @media(max-width: 767px) {
+    padding: 5px 15px;
+  }
+
+  &__link {
+    color: #FFF;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+
+    @media(max-width: 767px) {
+      font-size: 14px;
+    }
+  }
+}
+</style>

@@ -57,7 +57,7 @@ return [
             'engine'     => 'InnoDB',
             'host'       => 'localhost',
             'port'       => 3306,
-            'database'   => 'start',
+            'database'   => 'vue-flowers',
             'username'   => 'root',
             'password'   => 'root',
             'charset'    => 'utf8mb4',

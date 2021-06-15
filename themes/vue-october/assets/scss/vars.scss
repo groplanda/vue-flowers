@@ -1,0 +1,32 @@
+$primary: #484848;
+$secondary: #a2a1a1;
+$blue: #a993dc;
+$red: #ef726b;
+$green: #7dca3f;
+$brown: #d88861;
+$yellow: #ffad0d;
+$shadow: rgb(0, 0, 0, .10);
+$borderColor: #e6e6e6;
+
+@mixin placeholder($color) {
+  &::-moz-placeholder {
+    color: $color;
+    opacity: 1;
+  }
+  &::-webkit-input-placeholder {
+    color: $color;
+    opacity: 1;
+  }
+  &:-ms-input-placeholder {
+    color: $color;
+    opacity: 1;
+  }
+  &::-ms-input-placeholder {
+    color: $color;
+    opacity: 1;
+  }
+  &::placeholder {
+    color: $color;
+    opacity: 1;
+  }
+}

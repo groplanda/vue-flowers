@@ -1,0 +1,36 @@
+fields:
+    title:
+        label: Заголовок
+        span: auto
+        type: text
+    slug:
+        label: Слаг
+        span: auto
+        preset:
+            field: title
+            type: slug
+        type: text
+    description:
+        label: Описание
+        size: ''
+        span: full
+        type: richeditor
+    image:
+        label: Изображение
+        mode: image
+        imageWidth: '80'
+        imageHeight: '80'
+        span: auto
+        type: mediafinder
+    is_show:
+        label: 'Включить?'
+        span: auto
+        type: switch
+    is_quiz:
+        label: 'Открывать квиз?'
+        span: auto
+        type: switch
+    parent:
+        label: 'Родительская категория'
+        span: auto
+        type: parentbox
