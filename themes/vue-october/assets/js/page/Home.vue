@@ -4,7 +4,7 @@
     Categories
     ProductSlider(title="Самое популярное" :products="popularProducts")
     ProductSlider(title="Новинка" :products="newProducts")
-    Post
+    Post(:title="settings.siteName" :content="settings.aboutText")
     Special
     Advantages
 </template>
@@ -32,6 +32,9 @@ export default {
     },
     newProducts() {
       return this.$store.getters.getPopularProducts;
+    },
+    settings() {
+      return this.$store.getters.getSettings;
     }
   },
   created() {

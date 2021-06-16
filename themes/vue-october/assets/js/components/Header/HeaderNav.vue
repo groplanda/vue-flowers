@@ -101,7 +101,7 @@ export default {
     box-shadow: 0 10px 29px 0 $shadow;
     padding: 12px 0;
     position: absolute;
-    width: 180px;
+    width: 210px;
     top: 100%;
     left: 0;
     opacity: 0;
@@ -114,7 +114,7 @@ export default {
     font-size: 14px;
     font-weight: 600;
     display: block;
-    padding: 8px 20px;
+    padding: 8px 10px;
 
     &:hover {
       color: $primary;

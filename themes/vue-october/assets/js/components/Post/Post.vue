@@ -1,15 +1,23 @@
 <template lang="pug">
   section.post.section
     ._container.container
-      h1._title Интернет-магазин цветов
-      ._content
-        p Если Вы хотите, чтобы Ваш сайт не просто занимал свою нишу в сети Интернет, но и хорошо воспринимался поисковыми системами, Вы можете прочитать рекомендации, которые дает Яндекс - «Чем отличается качественный сайт от некачественного с точки зрения Яндекса» .
-        p Обращаем Ваше внимание, что текстовая информация на сайте должна быть индивидуальной, не скопированной с других Интернет-ресурсов, о чем указано в рекомендациях Яндекса:
-        p «Мы стараемся не индексировать или не ранжировать высоко сайты, копирующие информацию с других ресурсов и не создающие оригинального контента или сервиса».
+      h1._title(v-if="title") {{ title }}
+      ._content(v-html="content")
+
 </template>
 <script>
 export default {
-  name: "Post"
+  name: "Post",
+  props: {
+    content: {
+      type: String,
+      default: ""
+    },
+    title: {
+      type: String,
+      required: true
+    }
+  }
 }
 </script>
 <style lang="scss">
@@ -39,10 +47,13 @@ export default {
     color: $primary;
     font-size: 16px;
     margin-bottom: 15px;
-    
+
     @media(max-width: 767px) {
       font-size: 14px;
     }
+  }
+  &__content ul {
+    padding-left: 20px;
   }
 }
 </style>

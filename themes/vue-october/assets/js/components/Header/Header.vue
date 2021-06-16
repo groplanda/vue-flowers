@@ -27,7 +27,7 @@
       ._container.container
         ._center-row
           router-link(:to="{name: 'home' }")
-            img(src="https://annsflowersyoakum.com/wp-content/uploads/logo.png", alt="alt")._logo
+            img(:src="'/storage/app/media' + settings.siteLogo" :alt="settings.siteName")._logo
           ._content
             ._link-list
               router-link(to="#!")._link-item.-gift
@@ -38,9 +38,8 @@
                 span Оплата и доставка
             ._contacts
               icon(name="phone" component="header")._contacts-ico
-              ._contact-city г. Москва
-              a(href="tel:+70000000000")._contact-phone +7 (000) 000-00-00
-              a(href="tel:+70000000000")._contact-phone +7 (100) 000-00-00
+              ._contact-city(v-if="settings.address") {{ settings.address }}
+              a(:href="'tel:' + preparePhone(phone.val)" v-for="(phone, index) in settings.phone" :key="index")._contact-phone {{ phone.val }}
     HeaderNav(:categories="categories")
     MobileNav(:showMobileNav="showMobileNav" @closeNav="showMobileNav = false" :categories="categories")
 
@@ -49,6 +48,7 @@
 import MiniCart from './MiniCart';
 import HeaderNav from './HeaderNav';
 import MobileNav from './MobileNav';
+import { formattedPhone } from '@vue/helpers/formatted.js';
 
 export default {
   name: "Header",
@@ -56,6 +56,14 @@ export default {
     MiniCart,
     HeaderNav,
     MobileNav
+  },
+  props: {
+    settings: {
+      type: Object,
+      default() {
+        return {}
+      }
+    }
   },
   watch: {
     cart() {
@@ -115,6 +123,9 @@ export default {
       if (cart.length > 0) {
         this.$store.dispatch("fetchProductsByIds", cart);
       }
+    },
+    preparePhone(phone) {
+      return formattedPhone(phone);
     }
   },
   created() {

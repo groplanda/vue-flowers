@@ -11,6 +11,10 @@ columns:
     is_show:
         label: Активная
         type: switch
+    parent_id:
+        label: 'Родительская категория'
+        type: partial
+        path: ~/plugins/acme/shop/models/category/_parent_column.htm
     sort_order:
         label: 'Порядок сортировки'
         type: number

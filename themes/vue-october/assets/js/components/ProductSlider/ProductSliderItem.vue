@@ -9,27 +9,28 @@
         router-link(:to="{ name: 'product', params: { id: product.id }}")._link
           img(:src="product.image ? '/storage/app/media' + product.image : noImage", :alt="product.title")._image-thumb
 
-    ._bottom
+    ._bottom(:class="{ 'product-item__bottom--full': +product.price === 0 }")
       ._info
         router-link(:to="{ name: 'product', params: { id: product.id }}")._title {{ product.title }}
         router-link(:to="{ name: 'category', params: { slug: product.categories[0].slug }}" v-if="product.categories")._category  {{ product.categories[0].title}}
-      ._amount
-        ProductAmount(@changeAmount="changeAmount" :amount="amount")
-      ._cart(v-if="product.price > 0")
-        ._price
-          ._current-price
-            strong._price-val {{ productPrice }}
-            span._price-label ₽
-          ._old-price(v-if="+product.sale_price !== 0")
-            strong._price-val {{ (product.price).toLocaleString('ru') }}
-            span._price-label ₽
-        button(type="submit")._order-btn
-          icon(name="shopping-cart" component="product")._order-ico
+      template(v-if="+product.price > 0")
+        ._amount
+          ProductAmount(@changeAmount="changeAmount" :amount="amount")
+        ._cart
+          ._price
+            ._current-price
+              strong._price-val {{ productPrice }}
+              span._price-label ₽
+            ._old-price(v-if="+product.sale_price !== 0")
+              strong._price-val {{ (product.price).toLocaleString('ru') }}
+              span._price-label ₽
+          button(type="submit")._order-btn
+            icon(name="shopping-cart" component="product")._order-ico
 
-      ._cart.-full(v-else)
+      ._cart(v-else)
         ._price
           ._current-price
-            strong._price-val Цена не указана
+            strong._price-val Цена договорная
 
 
 
@@ -196,6 +197,14 @@ export default {
     @media(max-width: 575px) {
       padding: 10px 15px 15px;
     }
+
+    &--full {
+      #{$root} {
+        &__info, &__price {
+          max-width: 100%;
+        }
+      }
+    }
   }
 
   &__info {
@@ -229,6 +238,7 @@ export default {
 
   &__cart {
     width: 100%;
+    min-height: 50px;
     margin-top: 20px;
     display: flex;
     align-items: center;

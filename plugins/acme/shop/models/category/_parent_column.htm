@@ -1,0 +1,12 @@
+<?php if ($value):
+  $query = Db::table('acme_shop_categories')->select('title', 'id')->where('id', $value)->first();
+  $category = "";
+  if($query) {
+    $category = $query->title;
+    $id = $query->id;
+  }
+?>
+  <a href="/backend/acme/shop/categories/update/<?= $id; ?>"><?= $category; ?></a>
+<?php else: ?>
+  <?= "Не указана"; ?>
+<?php endif; ?>

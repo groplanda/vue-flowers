@@ -1,0 +1,134 @@
+tabs:
+  defaultTab: Контакты
+  lazy:
+      - Контакты
+      - Общие
+  paneCssClass:
+      0: first-tab
+      1: second-tab
+  icons:
+      Контакты: icon-phone
+      Общие: icon-cogs
+  fields:
+      phone:
+          label: Телефон
+          span: storm
+          cssClass: col-md-4
+          tab: Контакты
+          type: repeater
+          prompt: Добавить
+          form:
+              fields:
+                  val:
+                    label: Номер
+                    type: text
+                    placeholder: '+79147580525'
+
+      t_email:
+          type: email
+          label: E-mail
+          span: storm
+          cssClass: col-md-4
+          tab: Контакты
+          placeholder: 'example@mail.ru'
+      address:
+          type: text
+          label: Адрес
+          span: storm
+          cssClass: col-md-4
+          tab: Контакты
+          placeholder: 'г. Москва'
+      whatsapp:
+          type: text
+          label: WhatsApp
+          span: storm
+          cssClass: col-md-4
+          tab: Контакты
+          placeholder: '79147580525'
+      youtube:
+          type: text
+          label: youtube
+          span: storm
+          cssClass: col-md-4
+          tab: Контакты
+          placeholder:  https://www.youtube.com
+      vk:
+          type: text
+          label: Вконтакте
+          span: storm
+          cssClass: col-md-4
+          tab: Контакты
+          placeholder: https://vk.com
+      instagram:
+        type: text
+        label: Instagram
+        span: storm
+        cssClass: col-md-4
+        tab: Контакты
+        placeholder: https://www.instagram.com
+
+      site_name:
+        type: text
+        label: Название сайта
+        default: OctoberCms
+        span: full
+        tab: Общие
+      site_logo:
+        label: Логотип
+        type: mediafinder
+        mode: image
+        imageHeight: 75
+        imageWidth: 75
+        tab: Общие
+      banners:
+        label: Баннеры
+        span: storm
+        cssClass: col-md-12
+        tab: Общие
+        type: repeater
+        prompt: Добавить
+        minItems: 2
+        maxItems: 2
+        style: accordion
+        form:
+          fields:
+            title:
+              type: text
+              label: Заголовок
+              span: storm
+              cssClass: col-md-4
+            link:
+              type: text
+              label: Ссылка
+              span: storm
+              cssClass: col-md-4
+            tag:
+              type: text
+              label: Тег
+              span: storm
+              cssClass: col-md-4
+            image:
+              label: Фото
+              type: mediafinder
+              mode: image
+              imageHeight: 75
+              imageWidth: 75
+              span: storm
+              cssClass: col-md-12
+      about_section:
+        label: О компании
+        type: section
+        tab: Общие
+      about_text:
+        type: richeditor
+        size: large
+        label: Текст о компании
+        span: storm
+        cssClass: col-md-12
+        tab: Общие
+      about_link:
+        type: text
+        label: Ссылка о компании
+        span: storm
+        cssClass: col-md-12
+        tab: Общие

@@ -1,5 +1,9 @@
 <template lang="pug">
   section.product.section
+    Popup(v-if="popup" @close="popup = false")
+      ._popup-title Заказать {{ product.title }}
+      ContactForm
+
     transition(name="fade")
       ProductPopup(v-if="productPopup")
     ._container.container
@@ -80,20 +84,26 @@
           ._form-tag
             | В наличие
             icon(name="check" component="product")._form-tag-ico
-          ProductPrice(v-if="product.price" :price="+product.price" :salePrice="+product.sale_price")
-          ProductAmount(@changeAmount="changeAmount" :amount="amount")
-          button(type="button" @click="addToCart")._add
-            | В корзину
-            icon(name="cart" component="header")._add-ico
+          template(v-if="product.price")
+            ProductPrice(:price="+product.price" :salePrice="+product.sale_price")
+            ProductAmount(@changeAmount="changeAmount" :amount="amount")
+            button(type="button" @click="addToCart")._add
+              | В корзину
+              icon(name="shopping-cart" component="product")._add-ico
+          button(type="button" v-else @click="popup = true")._add
+            | Сделать заказ
+            icon(name="plus" component="product")._add-ico
 
 </template>
 <script>
 const Sticky = require('sticky-js');
 import setTitle from '@vue/helpers/setTitle.js';
 import ProductPopup from '@vue/components/Product/ProductPopup';
-import ProductAmount from '@vue/components/ProductSlider/ProductAmount.vue';
-import ProductPrice from '@vue/components/Product/ProductPrice.vue';
+import ProductAmount from '@vue/components/ProductSlider/ProductAmount';
+import ProductPrice from '@vue/components/Product/ProductPrice';
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper';
+import Popup from '@vue/components/Popup/Popup';
+import ContactForm from '@vue/components/ContactForm/ContactForm';
 
 export default {
   name: "Product",
@@ -103,10 +113,13 @@ export default {
     ProductPrice,
     Swiper,
     SwiperSlide,
-    directive
+    directive,
+    Popup,
+    ContactForm
   },
   data() {
     return {
+      popup: false,
       currentImage: "",
       amount: 1,
       productPopup: false,
@@ -645,13 +658,13 @@ export default {
     padding: 20px 30px;
     color: #fff;
     border: none;
-    background: $primary;
+    background: $blue;
     box-shadow: 7px 7px 30px $shadow;
     transition: all 0.18s linear;
     border-radius: 10px;
 
     &:hover, &:focus {
-      background: $primary;
+      background: darken($color: $blue, $amount: 10%);
     }
 
     @media(max-width: 991px) {
@@ -663,6 +676,23 @@ export default {
     fill: #FFF;
     width: 21px;
     height: 21px;
+  }
+
+  &__popup-title {
+    color: $primary;
+    font-weight: 700;
+    font-size: 25px;
+    margin-bottom: 20px;
+
+    @media(max-width: 1199px) {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    @media(max-width: 575px) {
+      font-size: 16px;
+    }
+
   }
 }
 </style>

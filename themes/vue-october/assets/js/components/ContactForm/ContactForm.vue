@@ -139,6 +139,7 @@ export default {
   }
 
   &__form-group {
+    width: 100%;
     position: relative;
     margin-bottom: 20px;
   }
