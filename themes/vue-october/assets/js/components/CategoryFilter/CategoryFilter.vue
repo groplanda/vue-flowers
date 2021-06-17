@@ -7,14 +7,31 @@
           icon(name="filter-arrow" component="filter")._sorting-arrow
         ._sorting-dropdown
           ._sorting-item(v-for="item in filterVars" :key="item.key" @click="onSorting(item)") {{ item.title }}
+    ._buttons
+      button._btn(type="button" @click="openPopup('Получить прайс-лист')") Прайс-лист
+      button._btn(type="button" @click="openPopup('Рассчитать стоимость заказа')") Рассчитать стоимость заказа
+      button._btn(type="button" @click="openPopup('Консультация специалиста')") Консультация специалиста
+
+    Popup(v-if="popup" @close="popup = false")
+      ._popup-title {{ selectedBtn }}
+      ContactForm(:showUserMail="true" :userSubject="'Заявка: ' + selectedBtn")
 
 
 </template>
 <script>
+import ContactForm from '@vue/components/ContactForm/ContactForm';
+import Popup from '@vue/components/Popup/Popup';
+
 export default {
   name: "CategoryFilter",
+  components: {
+    ContactForm,
+    Popup
+  },
   data() {
     return {
+      popup: false,
+      selectedBtn: "",
       resultText: "Сортировка",
       showFilterDropdown: false,
       filterVars: [
@@ -30,6 +47,10 @@ export default {
       this.resultText = item.title
       this.showFilterDropdown = false;
       this.$emit("sortedProducts", item.key);
+    },
+    openPopup(val) {
+      this.selectedBtn = val;
+      this.popup = true;
     }
   }
 }
@@ -41,6 +62,8 @@ export default {
   position: relative;
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
   margin-bottom: 40px;
   z-index: 2;
 
@@ -156,6 +179,75 @@ export default {
     &:hover {
       opacity: 1;
     }
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+
+    @media(max-width: 991px) {
+      max-width: 100%;
+      width: 100%;
+      margin: 20px -5px 0 -5px;
+      justify-content: center;
+    }
+  }
+
+  &__btn {
+    color: #FFF;
+    font-weight: 600;
+    font-size: 15px;
+    padding: 0 20px;
+    height: 51px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: $blue;
+    margin-right: 15px;
+    border-radius: 7px;
+    transition: background .3s ease;
+
+    @media(max-width: 1199px) {
+      padding: 0 15px;
+      height: 45px;
+      font-size: 14px;
+    }
+
+    @media(max-width: 991px) {
+      margin: 0 5px;
+    }
+
+    @media(max-width: 767px) {
+      width: 100%;
+      margin: 10px 0 0 0;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:hover, &:focus {
+      background: darken($color: $blue, $amount: 5%);
+    }
+  }
+
+  &__popup-title {
+    color: $primary;
+    font-weight: 700;
+    font-size: 25px;
+    margin-bottom: 20px;
+
+    @media(max-width: 1199px) {
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    @media(max-width: 575px) {
+      font-size: 16px;
+    }
+
   }
 }
 </style>

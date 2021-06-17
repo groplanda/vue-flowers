@@ -18,3 +18,9 @@
 1.0.7:
     - 'Updated table acme_settings_slider'
     - builder_table_update_acme_settings_slider_2.php
+1.0.8:
+    - 'Created table acme_settings_request'
+    - builder_table_create_acme_settings_request.php
+1.0.9:
+    - 'Updated table acme_settings_request'
+    - builder_table_update_acme_settings_request.php

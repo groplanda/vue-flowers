@@ -2,10 +2,9 @@
   section.product.section
     Popup(v-if="popup" @close="popup = false")
       ._popup-title Заказать {{ product.title }}
-      ContactForm
-
+      ContactForm(:showUserMail="true" :userSubject="'Заявка на товар: ' + product.title")
     transition(name="fade")
-      ProductPopup(v-if="productPopup")
+      ProductPopup(v-if="productPopup" :moving="isMoving")
     ._container.container
       ._heading
         h1._title {{ product.title }}
@@ -92,7 +91,7 @@
               icon(name="shopping-cart" component="product")._add-ico
           button(type="button" v-else @click="popup = true")._add
             | Сделать заказ
-            icon(name="plus" component="product")._add-ico
+            icon(name="shopping-cart" component="product")._add-ico
 
 </template>
 <script>
@@ -120,6 +119,7 @@ export default {
   data() {
     return {
       popup: false,
+      isMoving: false,
       currentImage: "",
       amount: 1,
       productPopup: false,
@@ -183,8 +183,12 @@ export default {
         this.productPopup = true;
 
         setTimeout(() => {
-          this.productPopup = false;
-        }, 2000)
+        this.isMoving = true
+          setTimeout(() => {
+            this.productPopup = false;
+            this.isMoving = false
+          }, 2500)
+        }, 1000)
       }
     }
   },

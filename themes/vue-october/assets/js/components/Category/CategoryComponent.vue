@@ -1,10 +1,9 @@
 <template lang="pug">
   section.category.section
-    ProductPopup(v-if="productPopup")
+    ProductPopup(v-if="productPopup" :moving="isMoving")
     ._container.container
       ._heading
         ._title {{ category.title }}
-
       Loading(v-if="showLoading")
       template(v-else)
         CategoryFilter(@sortedProducts="sortedProducts")
@@ -49,6 +48,7 @@ export default {
   data() {
     return {
       productPopup: false,
+      isMoving: false,
       pageNumber: 0,
       size: 20
     }
@@ -79,8 +79,12 @@ export default {
     showPopup(event) {
       this.productPopup = event;
       setTimeout(() => {
-        this.productPopup = false;
-      }, 2000)
+        this.isMoving = true
+        setTimeout(() => {
+          this.productPopup = false;
+          this.isMoving = false
+        }, 2500)
+      }, 1000)
     },
     sortedProducts(key) {
       this.$emit("sortedProducts", key, this.pageNumber * this.size);
@@ -242,7 +246,7 @@ export default {
     }
 
     &--active {
-      color: $secondary;
+      background: darken($color: $blue, $amount: 10%);
     }
   }
 }

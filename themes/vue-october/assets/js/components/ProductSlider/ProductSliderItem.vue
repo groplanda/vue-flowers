@@ -210,6 +210,8 @@ export default {
   &__info {
     width: 100%;
     max-width: calc(100% - 125px);
+    height: 47px;
+    overflow: hidden;
   }
 
   &__amount {

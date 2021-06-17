@@ -22,3 +22,7 @@ navigation:
                 label: Галерея
                 url: acme/settings/galleries
                 icon: icon-image
+            side-request:
+                label: 'Заявки из форм'
+                url: acme/settings/demands
+                icon: icon-envelope-o

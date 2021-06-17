@@ -19,7 +19,7 @@
             icon(name="close" component="header")._product-ico
     ._footer(v-if="cart > 0")
       router-link(:to="{ name: 'cart' }")._btn Оформить
-      button(type="button")._btn.-clear Очистить
+      button(type="button" @click="clearCart")._btn.-clear Очистить
 
 </template>
 <script>
@@ -52,6 +52,11 @@ export default {
         return (product.sale_price).toLocaleString('ru')
       }
       return (product.price).toLocaleString('ru')
+    },
+    clearCart() {
+      this.$emit('closeMiniCart');
+      localStorage.removeItem('cart');
+      this.$store.dispatch("fillCart" , []);
     }
   }
 }

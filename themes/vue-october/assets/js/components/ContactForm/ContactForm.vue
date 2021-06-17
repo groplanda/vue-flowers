@@ -6,21 +6,41 @@
       input(type="text" v-model="form.user_name" placeholder="Ваше имя*")._form-input
       span._error( v-if="nameErr") {{ nameErr }}
     ._form-group
-      input(type="tel" v-model="form.user_phone" placeholder="+7 (999) 999-99-99" v-mask="'+7 (###) ###-##-##'")._form-input
+      input(type="hidden" v-model="form.user_subject")._form-input
+      input(type="tel" v-model="form.user_phone" placeholder="+7 (999) 999-99-99*" v-mask="'+7 (###) ###-##-##'")._form-input
       span._error( v-if="phoneErr") {{ phoneErr }}
+    ._form-group(v-if="showUserMail")
+      input(type="text" v-model="form.user_mail" placeholder="Ваш E-mail")._form-input
+      span._error( v-if="mailErr") {{ mailErr }}
     button(type="submit" :class="{'contact-form__btn--offset': className === 'footer' && (nameErr || phoneErr)}")._btn Отправить
     ._status {{ submitStatus }}
+    Popup(v-if="popup" @close="closePopup")
+      .success
+        icon(name="checked" component="form")._ico
+        ._message {{ submitStatus }}
 </template>
 <script>
 import { onValidate, checkErr } from '@vue/helpers/validate.js';
+import Popup from '@vue/components/Popup/Popup';
 import axios from "axios";
 
 export default {
   name: "ContactForm",
+  components: {
+    Popup
+  },
   props: {
     className: {
       type: String,
       default: ""
+    },
+    userSubject: {
+      type: String,
+      default: "Заявка из контакной формы"
+    },
+    showUserMail: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -28,20 +48,24 @@ export default {
       form: {
         user_name: "",
         user_phone: "",
+        user_subject: this.userSubject,
+        user_mail: ""
       },
       submitStatus: null,
-      errors: []
+      errors: [],
+      popup: false
     }
   },
   computed: {
     nameErr() {
       return checkErr('user_name', this.errors);
     },
-
     phoneErr() {
       return checkErr('user_phone', this.errors);
     },
-
+    mailErr() {
+      return checkErr('user_mail', this.errors);
+    },
     submitMsg () {
       return this.submitStatus;
     }
@@ -64,8 +88,8 @@ export default {
           } else if(data.status === 'success') {
             message = data.message;
             this.resetForm();
+            this.popup = true;
           }
-
           this.setSubmitStatus(message);
 
         })
@@ -86,6 +110,11 @@ export default {
 
     setSubmitStatus(status) {
       this.submitStatus = status;
+    },
+
+    closePopup() {
+      this.popup = false;
+      this.setSubmitStatus(null);
     }
   }
 }
@@ -217,12 +246,43 @@ export default {
     text-align: center;
     font-size: 14px;
     font-weight: 500;
-    color: $primary;
+    color: $red;
     margin-top: 10px;
 
     @media(max-width: 767px) {
       margin-top: 5px;
       font-size: 12px;
+    }
+  }
+}
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 0;
+
+  @media(max-width: 767px) {
+    padding: 40px 0;
+  }
+
+  &__ico {
+    width: 105px;
+    height: 105px;
+    margin-bottom: 20px;
+
+    @media(max-width: 767px) {
+      width: 90px;
+      height: 90px;
+    }
+  }
+
+  &__message {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: $primary;
+    @media(max-width: 767px) {
+      font-size: 18px;
     }
   }
 

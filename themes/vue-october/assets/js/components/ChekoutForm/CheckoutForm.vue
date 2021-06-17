@@ -40,12 +40,21 @@
       button._btn(type="submit" :disabled="this.products.length == 0") Заказать
       ._status {{ submitStatus }}
 
+    Popup(v-if="popup" @close="closePopup")
+      .success
+        icon(name="checked" component="form")._ico
+        ._message {{ submitStatus }}
+
 </template>
 <script>
 import { onValidate, checkErr } from '@vue/helpers/validate.js';
+import Popup from '@vue/components/Popup/Popup';
 import axios from "axios";
 export default {
   name: "CheckoutForm",
+  components: {
+    Popup
+  },
   props: {
     products: {
       type: Array,
@@ -63,7 +72,8 @@ export default {
       },
       cloneProducts: [],
       submitStatus: null,
-      errors: []
+      errors: [],
+      popup: false
     }
   },
   computed: {
@@ -109,6 +119,7 @@ export default {
 
           } else if(data.status === 'success') {
             message = data.message;
+            this.popup = true;
             this.resetForm();
 
             if (localStorage.getItem('cart')) {
@@ -138,6 +149,11 @@ export default {
 
     setSubmitStatus(status) {
       this.submitStatus = status;
+    },
+
+    closePopup() {
+      this.popup = false;
+      this.setSubmitStatus(null);
     }
   }
 }

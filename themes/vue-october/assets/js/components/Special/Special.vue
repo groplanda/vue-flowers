@@ -9,7 +9,7 @@
             router-link(to="#!")._item-btn Подробнее
 
           ._item-image
-            img(src="http://online-flower-shop.oml.ru/thumb/2/RH_jZoioN6II17vptAmHcA/930r350/d/blok_spetspredlozheniy.png", alt="alt")._item-thumb
+            img(src="/themes/vue-october/assets/images/special.png", alt="alt")._item-thumb
 
 </template>
 <script>

@@ -88,7 +88,7 @@ export default {
     width: 100%;
     border-radius: 20px;
     padding: 30px;
-    background: $primary;
+    background: $blue;
     box-shadow: 0 10px 29px 0 $shadow;
     margin: 0 auto;
 

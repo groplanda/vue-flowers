@@ -8,6 +8,7 @@ use Validator;
 use Mail;
 use Backend\Models\User;
 use Acme\Shop\Models\Order;
+use Acme\Settings\Models\Demand;
 
 class OrderController extends Controller
 {
@@ -59,7 +60,7 @@ class OrderController extends Controller
 
       $this->insertData($request);
 
-      return response()->json(['status' => 'success', 'message' => 'Заказ добавлен успешно!']);
+      return response()->json(['status' => 'success', 'message' => 'Спасибо за ваш заказ, вскоре мы с вами свяжемся!']);
     }
   }
 
@@ -69,6 +70,9 @@ class OrderController extends Controller
     $rules = [
       'user_name'  => 'required|min:4|max:50',
       'user_phone' => 'required|min:11|max:50',
+      'user_subject' => 'required|min:11|max:50',
+      'user_mail'  => 'email',
+      'user_message' => 'max:500',
     ];
 
     $messages = [
@@ -85,7 +89,7 @@ class OrderController extends Controller
       return response()->json(array_merge(['status' => 'error'], $validatorErrors));
 
     } else {
-
+      $this->insertDemand($request);
       Mail::send('acme.shop::mail.request', $request->all(), function($message) {
         $message->to($this->getUserMail(), 'Admin Person');
         $message->subject('Новое сообщение с сайта');
@@ -117,6 +121,19 @@ class OrderController extends Controller
     $order->products = $request->get('products');
 
     $query = $order->save();
+    return $query;
+  }
+
+  private function insertDemand($request) {
+
+    $data = new Demand;
+    $data->user_name = $request->get('user_name');
+    $data->user_phone = $request->get('user_phone');
+    $data->user_mail = $request->get('user_mail');
+    $data->user_subject = $request->get('user_subject');
+    $data->user_message = $request->get('user_message');
+
+    $query = $data->save();
     return $query;
   }
 }
