@@ -83,7 +83,7 @@
           ._form-tag
             | В наличие
             icon(name="check" component="product")._form-tag-ico
-          template(v-if="product.price")
+          template(v-if="+product.price !== 0")
             ProductPrice(:price="+product.price" :salePrice="+product.sale_price")
             ProductAmount(@changeAmount="changeAmount" :amount="amount")
             button(type="button" @click="addToCart")._add
