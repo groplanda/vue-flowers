@@ -5,9 +5,9 @@
       span(v-else) Корзина пуста!
       button._close(@click="$emit('closeMiniCart')")
         icon(name="close" component="header")._close-ico
-    ._body(v-if="products")
+    ._body(v-if="miniCartProducts")
       ._product-list
-        ._product-item(v-for="product in products" :key="product.id")
+        ._product-item(v-for="product in miniCartProducts" :key="product.id")
           router-link(:to="{ name: 'product', params: { id: product.id }}")._product-image
             img(:src="product.image ? '/storage/app/media' + product.image : noImage", :alt="product.title")._product-thumb
           ._product-content
@@ -19,7 +19,6 @@
             icon(name="close" component="header")._product-ico
     ._footer(v-if="cart > 0")
       router-link(:to="{ name: 'cart' }")._btn Оформить
-      button(type="button" @click="clearCart")._btn.-clear Очистить
 
 </template>
 <script>
@@ -39,7 +38,8 @@ export default {
   },
   data() {
     return {
-      noImage: "/themes/vue-october/assets/images/no-image.jpg"
+      noImage: "/themes/vue-october/assets/images/no-image.jpg",
+      miniCartProducts: this.products
     }
   },
   methods: {
@@ -52,11 +52,6 @@ export default {
         return (product.sale_price).toLocaleString('ru')
       }
       return (product.price).toLocaleString('ru')
-    },
-    clearCart() {
-      this.$emit('closeMiniCart');
-      localStorage.removeItem('cart');
-      this.$store.dispatch("fillCart" , []);
     }
   }
 }
@@ -209,7 +204,6 @@ export default {
   }
 
   &__btn {
-    max-width: calc(50% - 5px);
     width: 100%;
     display: inline-flex;
     align-items: center;

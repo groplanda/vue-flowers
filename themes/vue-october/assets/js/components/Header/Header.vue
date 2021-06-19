@@ -6,10 +6,7 @@
           button(type="button" @click="showMobileNav = true")._menu
             icon(name="menu" component="header")._menu-ico
           ._nav
-            router-link(:to="{ name: 'home' }")._nav-link Главная
-            router-link(:to="page.url" v-for="(page, index) in pages" :key="index")._nav-link {{ page.title }}
-            router-link(to="#")._nav-link.-tablet-link Акции и скидки
-            router-link(to="#")._nav-link.-tablet-link Оплата и доставка
+            router-link(:to="link.url" v-for="(link, idx) in navbar" :key="idx" :class="link.class")._nav-link {{ link.title }}
           ._cart
             ._cart-heading(@click="showMiniCart = !showMiniCart")
               ._cart-val
@@ -18,8 +15,8 @@
               ._cart-sum {{ cart ? totalPrice + ' ₽' : 'Корзина пуста!' }}
             MiniCart(
               v-if="showMiniCart"
-              @closeMiniCart="showMiniCart = false"
               @deleteProduct="deleteProduct"
+              @closeMiniCart="showMiniCart = false"
               :products="products"
               :cart="cart"
               )
@@ -40,8 +37,13 @@
               icon(name="phone" component="header")._contacts-ico
               ._contact-city(v-if="settings.address") {{ settings.address }}
               a(:href="'tel:' + preparePhone(phone.val)" v-for="(phone, index) in settings.phone" :key="index")._contact-phone {{ phone.val }}
+              ._messenger(v-if="settings.whatsapp || settings.viber")
+                a(:href="'whatsapp://send?phone=+' + settings.whatsapp" v-if="settings.whatsapp && settings.whatsapp.length > 0")._messenger-link.-wa
+                  icon(name="whatsapp" component="footer")._messenger-ico
+                a(:href="'viber://add?number=' + settings.viber" v-if="settings.viber && settings.viber.length > 0")._messenger-link.-viber
+                  icon(name="viber" component="footer")._messenger-ico
     HeaderNav(:categories="categories")
-    MobileNav(:showMobileNav="showMobileNav" @closeNav="showMobileNav = false" :categories="categories")
+    MobileNav(:showMobileNav="showMobileNav" @closeNav="showMobileNav = false" :categories="categories" :navbar="navbar")
 
 </template>
 <script>
@@ -92,23 +94,21 @@ export default {
       let result = 0;
       this.products.forEach(product => {
         if (+product.sale_price !== 0) {
-          result = +product.sale_price * +product.amount;
+          result += +product.sale_price * +product.amount;
         } else {
-          result = +product.price * +product.amount;
+          result += +product.price * +product.amount;
         }
       });
       return result.toLocaleString('ru');
+    },
+    navbar() {
+      return this.$store.getters.getNavbar;
     }
   },
   data() {
     return {
       showMiniCart: false,
       showMobileNav: false,
-      pages: [
-        { title: 'О компании', url: '/' },
-        { title: 'Помощь', url: '/' },
-        { title: 'Контакты', url: '/' }
-      ]
     }
   },
   methods: {
@@ -449,6 +449,42 @@ export default {
     @media(max-width: 991px) {
       font-size: 18px;
     }
+  }
+
+  &__messenger {
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__messenger-link {
+    width: 34px;
+    height: 34px;
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 17px;
+
+    &--wa {
+      background: #25D366;
+    }
+
+    &--viber {
+      background: #665CAC;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__messenger-ico {
+    width: 16px;
+    height: 16px;
+    fill: #fff;
+    color: #FFF;
+    margin: 0;
   }
 }
 </style>

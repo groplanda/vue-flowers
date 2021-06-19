@@ -21,6 +21,8 @@
                 icon(name="youtube" component="footer")._social-ico
               a(:href="'whatsapp://send?phone=+' + settings.whatsapp" v-if="settings.whatsapp && settings.whatsapp.length > 0")._social-link.-wa
                 icon(name="whatsapp" component="footer")._social-ico
+              a(:href="'viber://add?number=' + settings.viber" v-if="settings.viber && settings.viber.length > 0")._social-link.-viber
+                icon(name="viber" component="footer")._social-ico
       ._bottom
         ContactForm(className="footer")
     ._copyright
@@ -230,6 +232,10 @@ export default {
 
     &--wa {
       background: #25D366;
+    }
+
+    &--viber {
+      background: #665CAC;
     }
 
     &:last-child {

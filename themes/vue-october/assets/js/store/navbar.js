@@ -19,7 +19,8 @@ const navbar = {
             items: el.items,
             url: el.url,
             code: el.code,
-            ref: el.reference
+            ref: el.reference,
+            class: el.viewBag ? el.viewBag.cssClass : ''
           }
         })
         commit("SET_NAVBAR", navbar)

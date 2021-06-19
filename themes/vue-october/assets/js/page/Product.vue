@@ -13,37 +13,24 @@
           ._slider
             ._tags
               ._tag.-new(v-if="+product.is_new") New
-              ._tag.-sale(v-if="+product.sale_price") Sale
+              ._tag.-sale(v-if="+product.sale_price") {{ productPercent }}
+              ._tag.-hit(v-if="+product.is_hit") Хит
             ._slider-current
               img(:src="currentImage ? currentImage : noImage" :zoomSrc="currentImage ? currentImage : noImage")._slider-image
-            Swiper(ref="addSlider" :options="sliderOptions" v-if="product.gallery && product.gallery.length")._slider-additional
-              SwiperSlide._swiper
-                ._slider-thumb(
-                  :class="{'product__slider-thumb--active': currentImage === '/storage/app/media' + product.image}"
-                  @click="changeImage('/storage/app/media' + product.image)")
-                  img(:src="'/storage/app/media' + product.image", :alt="product.title")._slider-thumb-image
-              SwiperSlide._swiper(v-for="image in product.gallery" :key="image.file_name")
-                ._slider-thumb(
-                  :class="{'product__slider-thumb--active': currentImage === image.path}"
-                  @click="changeImage(image.path)")
-                  img(:src="image.path", :alt="image.title")._slider-thumb-image
+            ._slider-additional(v-if="gallery && gallery.length")
+              button._slider-nav.-prev(type="button" @click="prevBanner")
+                icon(name="arrow-down" component="header")._slider-ico
+              button._slider-nav.-next(type="button" @click="nextBanner")
+                icon(name="arrow-down" component="header")._slider-ico
+              Swiper(ref="addSlider" :options="sliderOptions")._swiper-container
+                SwiperSlide._swiper(v-for="(image, index) in gallery" :key="index")
+                  ._slider-thumb(
+                    :class="{'product__slider-thumb--active': currentImage === image.path}"
+                    @click="changeImage(image.path)")
+                    img(:src="image.path", :alt="image.title")._slider-thumb-image
 
           ._content
-            ._categories-list
-              router-link(
-                :to="{ name: 'category', params: { slug: category.slug }}"
-                v-for="category in product.categories"
-                :key="category.slug")._categories-link {{ category.title }}
-            ._code(v-if="product.code") Артикул {{ product.code }}
-
-            ._props.-full(v-if="product.props && product.props.length")
-              ._props-row(v-for="(prop, index) in product.props" :key="index")
-                ._props-label {{ prop.props_option }}
-                ._props-val  {{ prop.props_value }}
-
-            ._entry.-desktop(v-if="product.description")
-              ._entry-title Описание
-              ._entry-descr(v-html="product.description")
+            ProductTab(:info="product")
 
           ._bottom
             ._order
@@ -54,15 +41,7 @@
                 | В корзину
                 icon(name="cart" component="header")._add-ico
 
-            ._props.-mobile(v-if="product.props && product.props.length")
-              ._props-row(v-for="(prop, index) in product.props" :key="index")
-                ._props-label {{ prop.props_option }}
-                ._props-val  {{ prop.props_value }}
-
-            ._entry.-mobile(v-if="product.description")
-              ._entry-title Описание
-              ._entry-descr(v-html="product.description")
-            ._folders
+            ._folders(v-if="product.tags && product.tags.length")
               ._folders-title Теги
               ._folders-list
                 router-link(
@@ -103,6 +82,7 @@ import ProductPrice from '@vue/components/Product/ProductPrice';
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper';
 import Popup from '@vue/components/Popup/Popup';
 import ContactForm from '@vue/components/ContactForm/ContactForm';
+import ProductTab from '@vue/components/Product/ProductTab';
 
 export default {
   name: "Product",
@@ -114,7 +94,8 @@ export default {
     SwiperSlide,
     directive,
     Popup,
-    ContactForm
+    ContactForm,
+    ProductTab
   },
   data() {
     return {
@@ -125,7 +106,7 @@ export default {
       productPopup: false,
       noImage: "/themes/vue-october/assets/images/no-image.jpg",
       sliderOptions: {
-        slidesPerView: 3,
+        slidesPerView: 2,
         spaceBetween: 10,
         loop: false,
         direction: 'vertical',
@@ -162,13 +143,46 @@ export default {
     product() {
       return this.$store.getters.getProduct;
     },
+    gallery() {
+      let result = [];
+        if (this.product.gallery && this.product.gallery.length > 0) {
+
+          if (this.product.image) {
+            result.push({
+              path: '/storage/app/media' +  this.product.image,
+              title: this.product.title
+            });
+          }
+
+          this.product.gallery.forEach(img => {
+             result.push({
+               path: img.path,
+               title: img.title
+             });
+          });
+        }
+      return result;
+    },
     swiper() {
       return this.$refs.addSlider.$swiper
+    },
+    productPercent() {
+      let result = 0;
+      if (+this.product.sale_price !== 0) {
+        result = 100 - ((this.product.sale_price / this.product.price * 100).toFixed(0))
+      }
+      return "-" + result + "%";
     }
   },
   methods: {
     fetchProduct(id) {
       this.$store.dispatch("fetchProductById", id);
+    },
+    prevBanner() {
+      this.swiper.slidePrev();
+    },
+    nextBanner() {
+      this.swiper.slideNext();
     },
     changeImage(imgSrc) {
       this.currentImage = imgSrc;
@@ -199,6 +213,14 @@ export default {
   mounted() {
     const sticky = new Sticky('[data-js="sticky"]');
     sticky.update();
+
+    if(window.innerWidth < 768) {
+      this.sliderOptions.direction = 'horizontal';
+    }
+
+    window.addEventListener('resize', () => {
+      window.innerWidth < 768 ? this.sliderOptions.direction = 'horizontal' : this.sliderOptions.direction = 'vertical';
+    });
   },
   updated() {
     setTitle(this.product);
@@ -283,6 +305,11 @@ export default {
     flex-wrap: wrap;
     width: 100%;
     position: relative;
+
+    @media(max-width: 767px) {
+      overflow: hidden;
+      flex-direction: column;
+    }
   }
 
   &__tags {
@@ -319,6 +346,10 @@ export default {
       background: $red;
     }
 
+    &--hit {
+      background: $blue;
+    }
+
     &:last-child {
       margin-right: 0;
     }
@@ -336,6 +367,10 @@ export default {
       padding-top: 100%;
       display: block;
     }
+
+    @media(max-width: 767px) {
+      max-width: 100%;
+    }
   }
 
   &__slider-image {
@@ -348,14 +383,72 @@ export default {
   }
 
   &__slider-additional {
+    padding: 40px 0;
     margin-left: 20px;
     width: 100%;
     max-width: 140px;
+    max-height: 635px;
+    position: relative;
+
+    @media(max-width: 767px) {
+      margin-left: 0;
+      max-width: 100%;
+      height: auto;
+      overflow: hidden;
+    }
   }
 
+  &__slider-nav {
+    width: 100%;
+    height: 40px;
+    background: $blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    z-index: 3;
+    left: 0;
+    outline: none;
+
+    &--prev {
+      top: 0;
+      border-radius: 7px 7px 0 0;
+
+      #{$root} {
+        &__slider-ico {
+          transform: rotate(180deg);
+        }
+      }
+    }
+
+    &--next {
+      bottom: 0;
+      border-radius: 0 0 7px 7px;
+    }
+
+    @media(max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &__slider-ico {
+    width: 24px;
+    height: 24px;
+    color: #FFF;
+  }
+
+  &__swiper-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
 
   &__swiper {
     height: auto !important;
+
+    @media(max-width: 767px) {
+      padding: 10px;
+    }
   }
 
   &__slider-thumb {
@@ -400,126 +493,6 @@ export default {
     object-position: 50% 50%;
   }
 
-  &__categories-list {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  &__categories-link {
-    font-weight: normal;
-    font-size: 15px;
-    line-height: 18px;
-    color: $primary;
-    opacity: 0.5;
-    margin-right: 10px;
-
-    &:last-child {
-      margin-right: 0;
-    }
-
-    @media(max-width: 767px) {
-      font-size: 14px;
-      margin-right: 5px;
-    }
-  }
-
-  &__code {
-    font-weight: 400;
-    font-size: 13px;
-    color: $primary;
-    margin: 20px 0;
-
-    @media(max-width: 767px) {
-      margin: 15px 0;
-    }
-  }
-
-  &__props {
-
-    &--full {
-      @media(max-width: 1440px) {
-        display: none;
-      }
-    }
-
-    &--mobile {
-      display: none;
-      @media(max-width: 1440px) {
-        margin-top: 30px;
-        display: block;
-      }
-    }
-  }
-
-  &__props-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 30px;
-    @media(max-width: 767px) {
-      margin-bottom: 20px;
-    }
-  }
-
-  &__props-label {
-    font-size: 15px;
-    color: $primary;
-    opacity: 0.6;
-    padding-right: 25px;
-    min-width: 100px;
-  }
-
-  &__props-val {
-    font-weight: 500;
-    font-size: 15px;
-    color: $primary;
-  }
-
-  &__entry {
-    width: 100%;
-    max-width: 100%;
-
-    &--desktop {
-      @media(max-width: 1740px) {
-        display: none;
-      }
-    }
-
-    &--mobile {
-      display: none;
-      @media(max-width: 1740px) {
-        display: block;
-      }
-    }
-  }
-
-  &__entry-title {
-    color: $primary;
-    font-weight: 600;
-    font-size: 20px;
-    margin-bottom: 30px;
-
-    @media(max-width: 767px) {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-  }
-
-  &__entry-descr , &__entry-descr p {
-    font-weight: normal;
-    font-size: 16px;
-    color: $primary;
-    line-height: 1.7;
-
-    p {
-      margin-bottom: 15px;
-    }
-
-    @media(max-width: 767px) {
-      font-size: 14px;
-    }
-  }
-
   &__bottom {
     width: 100%;
     max-width: 100%;
@@ -534,6 +507,10 @@ export default {
 
     @media(max-width: 991px) {
       display: block;
+      background: #fff;
+      padding: 30px 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 29px 0 $shadow;
     }
   }
 
@@ -581,7 +558,7 @@ export default {
     font-weight: 500;
     line-height: 1.2;
     color: #fff;
-    background: $primary;
+    background: $blue;
     box-shadow: 7px 7px 30px $shadow;
     margin: 0 10px 10px 0;
     padding: 10px 20px 9px;

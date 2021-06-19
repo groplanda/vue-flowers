@@ -35,7 +35,7 @@ export default {
   },
   created() {
     this.$store.dispatch("fetchCategories");
-    //this.$store.dispatch("fetchNavbar");
+    this.$store.dispatch("fetchNavbar");
     this.$store.dispatch("fetchSettings");
     if (localStorage.getItem('cart')) {
       this.$store.dispatch("fillCart" , JSON.parse(localStorage.getItem('cart')));

@@ -13,11 +13,11 @@
             ._nav-dropdown(v-if="category.childs && category.childs.length" data-js="dropdown-item")
               router-link(to="#!" v-for="subcat in category.childs"  :key="subcat.id")._nav-sublink {{ subcat.title }}
         ._nav.-menu
-          ._nav-item.-page(v-for="(page, index) in mobilepages" :key="index")
-            router-link(to="#!")._nav-link
+          ._nav-item.-page(v-for="(link, idx) in navbar" :key="idx")
+            router-link(:to="link.url")._nav-link
               button._nav-btn
                 icon(name="arrow-down" component="header")._nav-ico
-              span {{ page.title }}
+              span {{ link.title }}
 
 
 </template>
@@ -34,17 +34,12 @@ export default {
       default() {
         return []
       }
-    }
-  },
-  data() {
-    return {
-      mobilepages: [
-        { title: 'О компании', url: '/' },
-        { title: 'Помощь', url: '/' },
-        { title: 'Контакты', url: '/' },
-        { title: 'Акции и скидки', url: '/' },
-        { title: 'Оплата и доставка', url: '/' }
-      ]
+    },
+    navbar: {
+      type: Array,
+      default() {
+        return []
+      }
     }
   },
   computed: {

@@ -1,0 +1,47 @@
+items:
+    -
+        title: Главная
+        type: url
+        url: /
+        code: ''
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: 'О компании'
+        type: url
+        url: /post/about
+        code: ''
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: Контакты
+        type: url
+        url: /post/contacts
+        code: ''
+        viewBag:
+            isHidden: '0'
+            cssClass: ''
+            isExternal: '0'
+    -
+        title: 'Акции и скидки'
+        type: url
+        url: /post/special
+        code: ''
+        viewBag:
+            isHidden: '0'
+            cssClass: header__nav-link--tablet-link
+            isExternal: '0'
+    -
+        title: 'Оплата и доставка'
+        type: url
+        url: /post/delivery
+        code: ''
+        viewBag:
+            isHidden: '0'
+            cssClass: header__nav-link--tablet-link
+            isExternal: '0'
+name: 'Главное меню'

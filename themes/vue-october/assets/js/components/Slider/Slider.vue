@@ -17,18 +17,18 @@
           button._arrow.-next(type="button" @click="nextBanner")
             icon(name="arrow-next" component="banner")._arrow-ico
         ._banner
-          ._banner-item
-            ._banner-title Скидка 50% на второй букет!
-            ._banner-descr С 19 июня Вы можете приобрести второй букет со скидкой 50%!
-            ._banner-price от 990 ₽
-            router-link(to="#!")._banner-link
-            img(src="/themes/vue-october/assets/images/JoXuYkCT.jpg", alt="alt")._banner-img
-
-          ._banner-item
-            img(src="http://online-flower-shop.oml.ru/thumb/2/qW2HLqF8hnZtEnb_GgFk9g/580c420/d/malenkiy_blok.png", alt="alt")._banner-img
-            router-link(to="#!")._banner-btn Скидки
-              ._banner-ico
-                icon(name="arrow-next" component="banner")._banner-arrow
+          ._banner-item(v-for="(ad, index) in ads" :key="index")
+            template(v-if="+ad.banner_type === 1")
+              ._banner-title(v-if="ad.title") {{ ad.title }}
+              ._banner-descr(v-if="ad.descr") {{ ad.descr }}
+              ._banner-price(v-if="ad.tag") {{ ad.tag }}
+              router-link(:to="ad.link" v-if="ad.link")._banner-link
+              img(:src="'/storage/app/media' + ad.image", :alt="ad.title")._banner-img
+            template(v-else)
+              img(:src="'/storage/app/media' + ad.image", :alt="ad.title")._banner-img
+              router-link(:to="ad.link" v-if="ad.link")._banner-btn {{ ad.tag }}
+                ._banner-ico
+                  icon(name="arrow-next" component="banner")._banner-arrow
 </template>
 <script>
 import { Swiper, SwiperSlide, directive } from 'vue-awesome-swiper';
@@ -53,16 +53,17 @@ export default {
   computed: {
     swiper() {
       return this.$refs.BannerSlider.$swiper
+    },
+    ads() {
+      return this.$store.getters.getSettings.banners;
     }
   },
   methods: {
     prevBanner() {
       this.swiper.slidePrev();
-      this.updateThumb();
     },
     nextBanner() {
       this.swiper.slideNext();
-      this.updateThumb();
     },
     fetchSlides() {
       axios.get("/api/slider")

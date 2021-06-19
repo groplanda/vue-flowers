@@ -45,6 +45,13 @@ tabs:
           cssClass: col-md-4
           tab: Контакты
           placeholder: '79147580525'
+      viber:
+          type: text
+          label: Viber
+          span: storm
+          cssClass: col-md-4
+          tab: Контакты
+          placeholder: '79147580525'
       youtube:
           type: text
           label: youtube
@@ -92,20 +99,10 @@ tabs:
         style: accordion
         form:
           fields:
-            title:
-              type: text
-              label: Заголовок
-              span: storm
-              cssClass: col-md-4
-            link:
-              type: text
-              label: Ссылка
-              span: storm
-              cssClass: col-md-4
-            tag:
-              type: text
-              label: Тег
-              span: storm
+            banner_type:
+              label: Баннер вариант 1
+              comment:
+              type: checkbox
               cssClass: col-md-4
             image:
               label: Фото
@@ -114,7 +111,69 @@ tabs:
               imageHeight: 75
               imageWidth: 75
               span: storm
-              cssClass: col-md-12
+              cssClass: col-md-4
+            link:
+              type: text
+              label: Ссылка
+              span: storm
+              cssClass: col-md-4
+            title:
+              type: text
+              label: Заголовок
+              span: storm
+              cssClass: col-md-4
+              trigger:
+                action: show
+                field: banner_type
+                condition: checked
+            tag:
+              type: text
+              label: Тег
+              span: storm
+              cssClass: col-md-4
+            descr:
+              type: textarea
+              label: Описание
+              size: small
+              span: storm
+              cssClass: col-md-4
+              trigger:
+                action: show
+                field: banner_type
+                condition: checked
+
+      advantages:
+        label: Преимущества
+        span: storm
+        cssClass: col-md-12
+        tab: Общие
+        type: repeater
+        prompt: Добавить
+        minItems: 1
+        maxItems: 4
+        style: accordion
+        form:
+          fields:
+            ico:
+              label: Иконка
+              type: mediafinder
+              mode: image
+              imageHeight: 75
+              imageWidth: 75
+              span: storm
+              cssClass: col-md-3
+            title:
+              type: text
+              label: Заголовок
+              span: storm
+              cssClass: col-md-3
+            descr:
+              type: textarea
+              label: Описание
+              size: small
+              span: storm
+              cssClass: col-md-6
+
       about_section:
         label: О компании
         type: section
@@ -123,12 +182,6 @@ tabs:
         type: richeditor
         size: large
         label: Текст о компании
-        span: storm
-        cssClass: col-md-12
-        tab: Общие
-      about_link:
-        type: text
-        label: Ссылка о компании
         span: storm
         cssClass: col-md-12
         tab: Общие

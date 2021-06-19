@@ -4,7 +4,7 @@
       ._row
         ._item(v-for="adv in advantages" :key="adv.ico")
           ._item-img
-            img(src="/themes/vue-october/assets/images/package.png", alt="alt")._item-thumb
+            img(:src="adv.ico ? '/storage/app/media' + adv.ico : noImage", :alt="adv.title")._item-thumb
           ._item-title {{ adv.title }}
           ._item-descr {{ adv.descr }}
 
@@ -13,14 +13,14 @@
 <script>
 export default {
   name: "Advantages",
+  computed: {
+    advantages() {
+      return this.$store.getters.getSettings.advantages;
+    }
+  },
   data() {
     return {
-      advantages: [
-        { ico: 'delivery', title: 'Бесплатная доставка', descr: 'по всей России' },
-        { ico: 'sale', title: 'Cкидки и акции', descr: 'спецпредложении каждую неделю' },
-        { ico: 'gift', title: 'Оригинальные подарки', descr: 'при покупке' },
-        { ico: 'protect', title: 'Гарантия', descr: 'на всю продукцию' }
-      ]
+      noImage: "/themes/vue-october/assets/images/no-image.jpg",
     }
   }
 }
