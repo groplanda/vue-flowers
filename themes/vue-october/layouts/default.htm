@@ -1,4 +1,8 @@
 description = "Default layout"
+
+[staticPage]
+useContent = 1
+default = 0
 ==
 <!DOCTYPE html>
 <html>
@@ -21,7 +25,9 @@ description = "Default layout"
         <div id="app">
           <App />
         </div>
-
+        <div data-static-page>
+          {% component 'staticPage' %}
+        </div>
         <!-- Scripts -->
         <script src="{{ 'assets/dist/app.js'|theme }}"></script>
         {% scripts %}

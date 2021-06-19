@@ -1,6 +1,6 @@
 <template lang="pug">
    section.post.section
-    ._container.-center.container.container--main
+    ._container.container
       ._heading
         ._title 404
       ._body

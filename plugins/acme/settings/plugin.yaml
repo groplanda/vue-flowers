@@ -26,3 +26,7 @@ navigation:
                 label: 'Заявки из форм'
                 url: acme/settings/demands
                 icon: icon-envelope-o
+            menu-stocks:
+                label: Акции
+                url: acme/settings/stocks
+                icon: icon-star

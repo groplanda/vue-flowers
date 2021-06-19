@@ -74,12 +74,8 @@ export default {
     showPopup(event) {
       this.productPopup = event;
       setTimeout(() => {
-        this.isMoving = true
-        setTimeout(() => {
-          this.productPopup = false;
-          this.isMoving = false
-        }, 2500)
-      }, 1000)
+        this.productPopup = false;
+      }, 2500)
     }
   }
 }

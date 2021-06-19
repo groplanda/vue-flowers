@@ -8,6 +8,7 @@ use Cms\Classes\Theme;
 use Acme\Settings\Models\Slider;
 use Acme\Settings\Models\Testimonial;
 use Acme\Settings\Models\Gallery;
+use Acme\Settings\Models\Stock;
 use Illuminate\Http\Request;
 
 Route::prefix('/api')->group(function () {
@@ -88,5 +89,8 @@ Route::prefix('/api')->group(function () {
   Route::get('/post/{name}', 'Acme\Shop\Classes\Posts@getPost');
   Route::get('/search/{query}', function ($query) {
     return Product::select('id','title','image','price','sale_price','is_new','is_hit','code')->where('title','LIKE',"%{$query}%")->orWhere('code','LIKE',"%{$query}%")->orderBy('price', 'desc')->get();
+  });
+  Route::get('/stocks', function () {
+    return Stock::orderBy('sort_order', 'asc')->where('is_active', 1)->get();
   });
 });

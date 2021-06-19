@@ -1,9 +1,9 @@
 <template lang="pug">
   .app
-    Header(:settings="settings")
+    Header(:settings="settings" :navbar="navbar")
     main.main
       router-view
-    Footer(:settings="settings")
+    Footer(:settings="settings" :navbar="navbar")
 
 </template>
 

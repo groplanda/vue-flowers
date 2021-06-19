@@ -182,6 +182,7 @@ export default {
     background: #f8f8f8;
     padding: 40px;
     border-radius: 20px;
+    box-shadow: 0 10px 29px 0 $shadow;
 
     @media(max-width: 767px) {
       padding: 12px;

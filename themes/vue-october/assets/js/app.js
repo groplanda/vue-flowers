@@ -8,6 +8,10 @@ import VueMask from 'v-mask';
 Vue.component('icon', Icon);
 Vue.use(VueMask);
 
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelector('[data-static-page]').remove();
+})
+
 new Vue({
   el: '#app',
   router,

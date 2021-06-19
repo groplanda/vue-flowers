@@ -15,6 +15,12 @@
             ._props-val {{ prop.props_value }}
 
       ._body-item(v-if="activeTab == 2")
+        ._advantages
+          ._advantages-item(v-for="(adv, index) in advantages" :key="index")
+            ._advantages-img
+              img(:src="adv.ico ? '/storage/app/media' + adv.ico : noImage", :alt="adv.title")._advantages-thumb
+            ._advantages-title {{ adv.title }}
+            ._advantages-descr {{ adv.descr }}
 
 </template>
 <script>
@@ -29,12 +35,18 @@ export default {
   data() {
     return {
       activeTab: 0,
+      noImage: "/themes/vue-october/assets/images/no-image.jpg",
     }
   },
   methods: {
     changeTab(e) {
       const target = e.target;
       this.activeTab = target.dataset.tab;
+    }
+  },
+  computed: {
+    advantages() {
+      return this.$store.getters.getSettings.advantages;
     }
   }
 }
@@ -75,6 +87,11 @@ export default {
       padding: 12px 15px 18px;
     }
 
+    @media(max-width: 575px) {
+      font-size: 13px;
+      padding: 10px 10px 20px;
+    }
+
     &--active {
       color: $blue;
       background: #FFF;
@@ -92,6 +109,10 @@ export default {
     @media(max-width: 767px) {
       padding: 20px 15px;
     }
+  }
+
+  &__body-item {
+    width: 100%;
   }
 
   &__code {
@@ -169,6 +190,52 @@ export default {
     color: $primary;
     font-weight: 500;
     padding-left: 4px;
+  }
+
+  &__advantages {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+  }
+
+  &__advantages-item {
+    width: 100%;
+    max-width: calc(25% - 20px);
+    margin: 0 10px 20px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    @media(max-width: 1199px) {
+      max-width: calc(50% - 20px);
+    }
+
+    @media(max-width: 575px) {
+      max-width: calc(100% - 20px);
+    }
+  }
+
+  &__advantages-img {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    margin-bottom: 10px;
+    padding: 20px;
+    border-radius: 45px;
+    background: $blue;
+  }
+
+  &__advantages-title {
+    font-size: 15px;
+    color: $primary;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  &__advantages-descr {
+    font-size: 14px;
+    color: $secondary;
   }
 }
 </style>

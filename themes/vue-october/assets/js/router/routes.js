@@ -7,6 +7,10 @@ import Cart from '@vue/page/Cart'
 import Checkout from '@vue/page/Checkout'
 import Product from '@vue/page/Product'
 import SearchPage from '@vue/page/SearchPage'
+import Tag from '@vue/page/Tag'
+import Notfound from '@vue/page/Notfound'
+import Post from '@vue/page/PostPage'
+import Stocks from '@vue/page/Stocks'
 
 Vue.use(Router);
 let router = new Router({
@@ -37,21 +41,31 @@ let router = new Router({
           name: 'product',
           component: Product
         },
-        // {
-        //   path: '/tag/:slug',
-        //   name: 'tag',
-        //   component: Tag
-        // },
+        {
+          path: '/tag/:slug',
+          name: 'tag',
+          component: Tag
+        },
         {
           path: '/search',
           name: 'search',
           component: SearchPage
         },
-        // {
-        //   path: '/404',
-        //   name: 'notfound',
-        //   component: Notfound
-        // }
+        {
+          path: '/post/:slug',
+          name: 'post',
+          component: Post
+        },
+        {
+          path: '/stocks',
+          name: 'stocks',
+          component: Stocks
+        },
+        {
+          path: '/404',
+          name: 'notfound',
+          component: Notfound
+        }
     ]
 });
 

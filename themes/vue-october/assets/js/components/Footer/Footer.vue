@@ -2,8 +2,8 @@
   footer.footer.section
     ._container.container
       ._top
-        ._nav
-          router-link(:to="link.url" v-for="(link, index) in footerLinks" :key="index")._nav-link {{ link.title }}
+        ._nav(v-if="navbar")
+          router-link(:to="nav.url" v-for="(nav, index) in navbar" :key="index")._nav-link {{ nav.title }}
 
         ._right
           ._contacts
@@ -50,17 +50,6 @@ export default {
       default() {
         return []
       }
-    }
-  },
-  data() {
-    return {
-      footerLinks: [
-        { title: 'О компании', url: '/' },
-        { title: 'Помощь', url: '/' },
-        { title: 'Контакты', url: '/' },
-        { title: 'Акции и скидки', url: '/' },
-        { title: 'Оплата и доставка', url: '/' }
-      ]
     }
   },
   methods: {

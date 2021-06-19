@@ -9,7 +9,7 @@
             img(:src="cat.image ? '/storage/app/media' + cat.image : noImage", :alt="cat.title")._item-thumb
           ._item-content
             ._item-title {{ cat.title }}
-
+            icon(name="arrow-down" component="header")._item-ico
 </template>
 <script>
 export default {
@@ -108,6 +108,9 @@ export default {
         &__item-content {
           color: #FFF;
         }
+        &__item-ico {
+          color: #FFF;
+        }
       }
     }
   }
@@ -160,6 +163,16 @@ export default {
       font-size: 16px;
       padding: 15px 30px 15px 20px;
     }
+  }
+
+  &__item-ico {
+    position: absolute;
+    right: 20px;
+    top: calc(50% - 15px);
+    width: 30px;
+    height: 30px;
+    color: $blue;
+    transform: rotate(-90deg);
   }
 }
 </style>

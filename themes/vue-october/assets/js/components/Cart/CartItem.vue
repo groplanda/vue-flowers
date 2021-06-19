@@ -88,6 +88,7 @@ export default {
   border-radius: 20px;
   margin-bottom: 40px;
   position: relative;
+  box-shadow: 0 7px 15px 0 $shadow;
 
   $root: &;
 

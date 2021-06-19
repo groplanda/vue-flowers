@@ -27,10 +27,10 @@
             img(:src="'/storage/app/media' + settings.siteLogo" :alt="settings.siteName")._logo
           ._content
             ._link-list
-              router-link(to="#!")._link-item.-gift
+              router-link(:to="{ name: 'stocks' }")._link-item.-gift
                 icon(name="gift" component="header")._link-ico
                 span Акции и скидки
-              router-link(to="#!")._link-item.-delivery
+              router-link(to="/post/delivery")._link-item.-delivery
                 icon(name="pay" component="header")._link-ico
                 span Оплата и доставка
             ._contacts
@@ -64,6 +64,12 @@ export default {
       type: Object,
       default() {
         return {}
+      }
+    },
+    navbar: {
+      type: Array,
+      default() {
+        return []
       }
     }
   },
@@ -100,9 +106,6 @@ export default {
         }
       });
       return result.toLocaleString('ru');
-    },
-    navbar() {
-      return this.$store.getters.getNavbar;
     }
   },
   data() {
@@ -295,7 +298,7 @@ export default {
   }
 
   &__center {
-    padding: 28px 0 33px;
+    padding: 10px 0 15px;
     display: flex;
     justify-content: center;
   }

@@ -5,6 +5,7 @@
       ._tags
         ._tag.-new(v-if="+product.is_new") New
         ._tag.-sale(v-if="+product.sale_price") {{ productPercent }}
+        ._tag.-hit(v-if="+product.is_hit") Хит
       ._image
         router-link(:to="{ name: 'product', params: { id: product.id }}")._link
           img(:src="product.image ? '/storage/app/media' + product.image : noImage", :alt="product.title")._image-thumb
@@ -137,6 +138,10 @@ export default {
 
     &--sale {
       background: $red;
+    }
+
+    &--hit {
+      background: $blue;
     }
 
     &:last-child {

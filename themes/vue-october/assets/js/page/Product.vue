@@ -34,12 +34,16 @@
 
           ._bottom
             ._order
-              ._order-row
-                ProductPrice(v-if="product.price" :price="+product.price" :salePrice="+product.sale_price")
-                ProductAmount(@changeAmount="changeAmount" @amount="amount")
-              button(type="button" @click="addToCart")._add
-                | В корзину
-                icon(name="cart" component="header")._add-ico
+              template(v-if="+product.price !== 0")
+                ._order-row
+                  ProductPrice(:price="+product.price" :salePrice="+product.sale_price")
+                  ProductAmount(@changeAmount="changeAmount" @amount="amount")
+                button(type="button" @click="addToCart")._add
+                  | В корзину
+                  icon(name="cart" component="header")._add-ico
+              button(type="button" v-else @click="popup = true")._add.-form
+                | Сделать заказ
+                icon(name="shopping-cart" component="product")._add-ico
 
             ._folders(v-if="product.tags && product.tags.length")
               ._folders-title Теги
@@ -646,6 +650,10 @@ export default {
 
     &:hover, &:focus {
       background: darken($color: $blue, $amount: 10%);
+    }
+
+    &--form {
+      margin-top: 0;
     }
 
     @media(max-width: 991px) {

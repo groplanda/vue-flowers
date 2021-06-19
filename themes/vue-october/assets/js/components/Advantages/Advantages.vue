@@ -2,7 +2,7 @@
   .advantages.section
     ._container.container
       ._row
-        ._item(v-for="adv in advantages" :key="adv.ico")
+        ._item(v-for="(adv, index) in advantages" :key="index")
           ._item-img
             img(:src="adv.ico ? '/storage/app/media' + adv.ico : noImage", :alt="adv.title")._item-thumb
           ._item-title {{ adv.title }}
