@@ -7,11 +7,11 @@
         ._nav
           ._nav-item(v-for="category in categories" :key="category.id" data-js="nav-item")
             ._nav-link
-              button(@click="toggleMenu")._nav-btn
+              button(@click="toggleMenu"  :class="{'mobile-nav__nav-btn--disabled': category.childs && category.childs.length == 0}")._nav-btn
                 icon(name="arrow-down" component="header")._nav-ico
               router-link(:to="{ name: 'category', params: { slug: category.slug }}")._nav-text {{ category.title }}
             ._nav-dropdown(v-if="category.childs && category.childs.length" data-js="dropdown-item")
-              router-link(to="#!" v-for="subcat in category.childs"  :key="subcat.id")._nav-sublink {{ subcat.title }}
+              router-link(:to="{ name: 'category', params: { slug: subcat.slug }}" v-for="subcat in category.childs"  :key="subcat.id")._nav-sublink {{ subcat.title }}
         ._nav.-menu
           ._nav-item.-page(v-for="(link, idx) in navbar" :key="idx")
             router-link(:to="link.url")._nav-link
@@ -170,6 +170,15 @@ export default {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+
+    &--disabled {
+      pointer-events: none;
+      #{$root} {
+        &__nav-ico {
+          color: $secondary;
+        }
+      }
+    }
   }
 
   &__nav-ico {

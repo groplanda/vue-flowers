@@ -5,6 +5,7 @@
         ._top-row
           button(type="button" @click="showMobileNav = true")._menu
             icon(name="menu" component="header")._menu-ico
+            ._menu-text меню
           ._nav
             router-link(:to="link.url" v-for="(link, idx) in navbar" :key="idx" :class="link.class")._nav-link {{ link.title }}
           ._cart
@@ -160,15 +161,23 @@ export default {
     display: none;
     @media(max-width: 767px) {
       display: flex;
-      width: 18px;
-      height: 12px;
+      align-items: center;
+
     }
   }
 
   &__menu-ico {
-    width: 100%;
-    height: 100%;
+    width: 18px;
+    height: 12px;
     color: $blue;
+  }
+
+  &__menu-text {
+    color: $blue;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 14px;
+    margin: 1px 0 0 10px;
   }
 
   &__nav {
@@ -458,6 +467,9 @@ export default {
     margin-top: 5px;
     display: flex;
     flex-wrap: wrap;
+    @media(max-width: 767px) {
+      justify-content: center;
+    }
   }
 
   &__messenger-link {
