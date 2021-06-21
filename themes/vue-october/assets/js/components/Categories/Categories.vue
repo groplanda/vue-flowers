@@ -147,32 +147,50 @@ export default {
 
   &__item-content {
     color: $primary;
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1.25;
-    padding: 22px 45px 22px 30px;
+    padding: 22px 50px 22px 25px;
     display: flex;
     align-items: center;
     position: relative;
     transition: color .3 ease;
+
     @media(max-width: 991px) {
       font-size: 18px;
       padding: 20px 35px 20px 20px;
     }
+
     @media(max-width: 767px) {
       font-size: 16px;
-      padding: 15px 30px 15px 20px;
+      padding: 15px 40px 15px 20px;
+    }
+
+    @media(max-width: 575px) {
+      font-size: 14px;
     }
   }
 
   &__item-ico {
     position: absolute;
-    right: 20px;
+    right: 15px;
     top: calc(50% - 15px);
     width: 30px;
     height: 30px;
     color: $blue;
     transform: rotate(-90deg);
+
+    @media(max-width: 767px) {
+      width: 26px;
+      height: 26px;
+      top: calc(50% - 13px);
+    }
+
+    @media(max-width: 575px) {
+      width: 20px;
+      height: 20px;
+      top: calc(50% - 10px);
+    }
   }
 }
 </style>
