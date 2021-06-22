@@ -24,7 +24,7 @@
     ._center
       ._container.container
         ._center-row
-          router-link(:to="{name: 'home' }")
+          router-link(:to="{name: 'home' }")._logo-url
             img(:src="'/storage/app/media' + settings.siteLogo" :alt="settings.siteName")._logo
           ._content
             ._link-list
@@ -43,6 +43,8 @@
                   icon(name="whatsapp" component="footer")._messenger-ico
                 a(:href="'viber://add?number=' + settings.viber" v-if="settings.viber && settings.viber.length > 0")._messenger-link.-viber
                   icon(name="viber" component="footer")._messenger-ico
+                a(:href="settings.instagram" v-if="settings.instagram && settings.instagram.length > 0" target="_blank")._messenger-link.-instagram
+                  icon(name="instagram" component="footer")._messenger-ico
     HeaderNav(:categories="categories")
     MobileNav(:showMobileNav="showMobileNav" @closeNav="showMobileNav = false" :categories="categories" :navbar="navbar")
 
@@ -319,6 +321,12 @@ export default {
     justify-content: space-between;
   }
 
+  &__logo-url {
+    @media(max-width: 575px) {
+      margin: 0 auto;
+    }
+  }
+
   &__logo {
     display: flex;
     width: 100%;
@@ -327,10 +335,6 @@ export default {
 
     @media(max-width: 1199px) {
       max-width: 200px;
-    }
-
-    @media(max-width: 575px) {
-      margin: 0 auto;
     }
   }
 
@@ -487,6 +491,17 @@ export default {
 
     &--viber {
       background: #665CAC;
+    }
+
+    &--instagram {
+      background: #b55928;
+
+      #{$root} {
+        &__messenger-ico {
+          width: 18px;
+          height: 18px;
+        }
+      }
     }
 
     &:last-child {
