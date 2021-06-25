@@ -432,7 +432,7 @@ export default {
   }
 
   &__contacts-ico {
-    fill: $secondary;
+    fill: $primary;
     width: 20px;
     height: 20px;
     position: absolute;

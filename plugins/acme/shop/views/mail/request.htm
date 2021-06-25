@@ -1,3 +1,18 @@
 <p>
   Новая заявка с сайта от <b>{{ user_name }}</b> - <b>{{ user_phone }}</b>
 </p>
+{% if user_email %}
+<p>
+  E-mail: {{ user_email }}
+</p>
+{% endif %}
+{% if user_subject %}
+<p>
+  Тема письма: {{ user_subject }}
+</p>
+{% endif %}
+{% if user_message %}
+<p>
+  Сообщение: {{ user_message }}
+</p>
+{% endif %}

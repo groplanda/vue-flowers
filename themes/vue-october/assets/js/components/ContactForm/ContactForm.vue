@@ -12,6 +12,9 @@
     ._form-group(v-if="showUserMail")
       input(type="text" v-model="form.user_mail" placeholder="Ваш E-mail")._form-input
       span._error( v-if="mailErr") {{ mailErr }}
+    ._form-group(v-if="userSubject === 'Заявка: Рассчитать стоимость заказа'")
+      textarea(type="text" v-model="form.user_message" placeholder="Напишите что хотите рассчитать")._form-input.-textarea
+      span._error( v-if="messageErr") {{ messageErr }}
     button(type="submit" :class="{'contact-form__btn--offset': className === 'footer' && (nameErr || phoneErr)}")._btn Отправить
     ._status {{ submitStatus }}
     Popup(v-if="popup" @close="closePopup")
@@ -49,7 +52,8 @@ export default {
         user_name: "",
         user_phone: "",
         user_subject: this.userSubject,
-        user_mail: ""
+        user_mail: "",
+        user_message: ""
       },
       submitStatus: null,
       errors: [],
@@ -65,6 +69,9 @@ export default {
     },
     mailErr() {
       return checkErr('user_mail', this.errors);
+    },
+    messageErr() {
+      return checkErr('user_message', this.errors);
     },
     submitMsg () {
       return this.submitStatus;
@@ -210,6 +217,16 @@ export default {
     @media(max-width: 767px) {
       padding: 0 10px;
       font-size: 14px;
+    }
+
+    &--textarea {
+      padding: 20px;
+      height: 100px;
+
+      @media(max-width: 767px) {
+        padding: 10px;
+        height: 75px;
+      }
     }
   }
 
