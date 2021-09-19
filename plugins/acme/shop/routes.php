@@ -99,4 +99,5 @@ Route::prefix('/api')->group(function () {
     return Stock::orderBy('sort_order', 'asc')->where('is_active', 1)->get();
   });
   Route::post('/add-comment', 'Acme\Shop\Classes\CommentController@add');
+  Route::get('/checkout/result', 'Acme\Shop\Classes\OrderController@notification');
 });

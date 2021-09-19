@@ -37,6 +37,19 @@
             placeholder="Комментарий"
             :class="{ 'checkout-form__input--error': commentErr }")._input.-textarea
           span._error( v-if="commentErr") {{ commentErr }}
+        ._group.-full
+          label._radio
+            input(type="radio" name="payment_type" value="0" checked v-model="form.user_payment")._radio-input
+            span._radio-el
+            span._radio-text Оплата при доставке
+
+          label._radio
+            input(type="radio" name="payment_type" value="1" v-model="form.user_payment")._radio-input
+            span._radio-el
+            span._radio-text Онлайн-оплата (Yandex Kassa)
+            icon(name="yakassa" component="checkout")._radio-ico
+
+          span._error( v-if="paymentErr") {{ paymentErr }}
       button._btn(type="submit" :disabled="this.products.length == 0") Заказать
       ._status {{ submitStatus }}
 
@@ -68,7 +81,9 @@ export default {
         user_phone: "",
         user_mail: "",
         user_address: "",
-        user_comment: ""
+        user_comment: "",
+        user_payment: 0,
+        user_sum: 0
       },
       cloneProducts: [],
       submitStatus: null,
@@ -97,9 +112,21 @@ export default {
       return checkErr('user_comment', this.errors);
     },
 
+    paymentErr() {
+      return checkErr('user_payment', this.errors);
+    },
+
     submitMsg () {
       return this.submitStatus;
-    }
+    },
+
+    calculateSum() {
+      let result = 0;
+      this.products.forEach(product => {
+        result += Number(product.amount) * Number(product.price);
+      })
+      return result;
+    },
   },
   methods: {
     onCheckout() {
@@ -108,6 +135,7 @@ export default {
 
       this.setSubmitStatus("Заказ отправляется...");
       this.form.products = this.products;
+      this.form.user_sum = this.calculateSum;
 
       axios.post('api/add-order', this.form)
         .then(response => {
@@ -282,6 +310,97 @@ export default {
     font-size: 14px;
     line-height: 18px;
     font-weight: 500;
+  }
+
+  &__radio {
+    display: flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    margin-bottom: 20px;
+
+    @media(max-width: 767px) {
+      align-items: flex-start;
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__radio-input {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+
+    &:checked ~ {
+      #{$root} {
+        &__radio-el {
+          border-color: $blue;
+        }
+        &__radio-el::after {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  &__radio-el {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    border: 1px solid $secondary;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 10px;
+    transition: all .2s ease;
+
+    @media(max-width: 767px) {
+      width: 16px;
+      height: 16px;
+      border-radius: 8px;
+      margin-right: 7px;
+      top: 4px;
+      position: relative;
+    }
+
+    &::after {
+      content: "";
+      width: 10px;
+      height: 10px;
+      border-radius: 5px;
+      background: $blue;
+      opacity: 0;
+
+      @media(max-width: 767px) {
+        width: 8px;
+        height: 8px;
+        border-radius: 4px;
+      }
+    }
+  }
+
+  &__radio-text {
+    font-size: 16px;
+    line-height: 21px;
+
+    @media(max-width: 767px) {
+      max-width: calc(100% - 90px);
+    }
+  }
+
+  &__radio-ico {
+    margin-left: 10px;
+    display: flex;
+    width: 60px;
+    height: auto;
+
+    @media(max-width: 767px) {
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
   }
 
 }
