@@ -52,4 +52,8 @@ class Product extends Model
         'table' => 'acme_shop_product_tags',
       ],
     ];
+
+    public $hasMany  = [
+      'comments' => [\Acme\Shop\Models\Comment::class, 'key' => 'product_id']
+    ];
 }

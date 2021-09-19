@@ -95,3 +95,10 @@ tabs:
                         span: auto
                         placeholder: 120см
                         type: text
+        comments:
+            label: Комметарии
+            nameFrom: title
+            descriptionFrom: description
+            span: auto
+            type: relation
+            tab: Отзывы

@@ -74,7 +74,9 @@ Route::prefix('/api')->group(function () {
     }])->withCount('products')->first();
   });
   Route::get('/product/{id}', function ($id) {
-    return Product::with(['categories', 'gallery', 'tags'])->where('id', $id)->first();
+    return Product::with(['categories', 'gallery', 'tags'])->with(['comments' => function($query) {
+      $query->orderBy('sort_order', 'asc')->where('status', 1);
+    }])->where('id', $id)->first();
   });
   Route::get('/slider', function () {
     return Slider::orderBy('sort_order', 'asc')->get();
@@ -88,9 +90,13 @@ Route::prefix('/api')->group(function () {
   });
   Route::get('/post/{name}', 'Acme\Shop\Classes\Posts@getPost');
   Route::get('/search/{query}', function ($query) {
-    return Product::select('id','title','image','price','sale_price','is_new','is_hit','code')->where('title','LIKE',"%{$query}%")->orWhere('code','LIKE',"%{$query}%")->orderBy('price', 'desc')->get();
+    return Product::select('id','title','image','price','sale_price','is_new','is_hit','code')
+    ->where('title','LIKE',"%{$query}%")
+    ->orWhere('code','LIKE',"%{$query}%")
+    ->orderBy('price', 'desc')->get();
   });
   Route::get('/stocks', function () {
     return Stock::orderBy('sort_order', 'asc')->where('is_active', 1)->get();
   });
+  Route::post('/add-comment', 'Acme\Shop\Classes\CommentController@add');
 });

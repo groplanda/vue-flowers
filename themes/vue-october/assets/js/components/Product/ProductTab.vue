@@ -4,6 +4,7 @@
       ._heading-item(@click="changeTab" data-tab="0" :class="{ 'product-tab__heading-item--active': activeTab == 0 }") Описание
       ._heading-item(v-if="info.props && info.props.length" @click="changeTab" data-tab="1" :class="{ 'product-tab__heading-item--active': activeTab == 1 }") Параметры
       ._heading-item(@click="changeTab" data-tab="2" :class="{ 'product-tab__heading-item--active': activeTab == 2 }") Преимущества
+      ._heading-item(@click="changeTab" data-tab="3" :class="{ 'product-tab__heading-item--active': activeTab == 3 }") Отзывы
     ._body
       ._body-item(v-if="activeTab == 0")
         ._code(v-if="info.code") Артикул {{ info.code }}
@@ -22,8 +23,13 @@
             ._advantages-title {{ adv.title }}
             ._advantages-descr {{ adv.descr }}
 
+      ._body-item(v-if="activeTab == 3")
+        ProductComment(:comments="info.comments")
+
 </template>
 <script>
+import ProductComment from './Comment/Comment';
+
 export default {
   name: "ProductTab",
   props: {
@@ -31,6 +37,9 @@ export default {
       type: Object,
       required: true
     }
+  },
+  components: {
+    ProductComment
   },
   data() {
     return {

@@ -176,8 +176,67 @@ export default {
 
   &__form-group {
     width: 100%;
+    display: flex;
+    flex-direction: column;
     position: relative;
     margin-bottom: 20px;
+  }
+
+  &__form-status-title {
+    font-size: 14px;
+    line-height: 19px;
+    margin-bottom: 10px;
+
+    @media(max-width: 767px) {
+      font-size: 12px;
+    }
+  }
+
+  &__form-status-list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__form-status {
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    margin-right: 6px;
+    position: relative;
+
+    @media(max-width: 767px) {
+      width: 21px;
+      height: 21px;
+      margin-right: 5px;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__form-status-input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+
+    &:checked {
+      #{$root} {
+        &__form-status-ico {
+          fill: $yellow;
+        }
+      }
+    }
+  }
+
+  &__form-status-ico {
+    fill: $secondary;
+    width: 100%;
+    height: 100%;
+
+    &_active {
+      fill: $yellow;
+    }
   }
 
   &__error {

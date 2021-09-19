@@ -30,3 +30,7 @@ navigation:
                 label: Теги
                 url: acme/shop/tags
                 icon: icon-tags
+            side-menu-comment:
+                label: Отзывы
+                url: acme/shop/comments
+                icon: icon-wechat
