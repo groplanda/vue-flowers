@@ -145,16 +145,17 @@ export default {
             this.onValidate(data)
             this.setSubmitStatus(null);
 
+          } else if (data.status === 'redirect') {
+            message = 'Подготовка формы оплаты...';
+            this.clearProductData();
+            setTimeout(() => {
+              window.location.replace(data.message);
+            }, 1500);
+
           } else if(data.status === 'success') {
             message = data.message;
             this.popup = true;
-            this.resetForm();
-
-            if (localStorage.getItem('cart')) {
-              localStorage.removeItem('cart');
-              this.$store.dispatch("fillCart" , []);
-              this.$emit("hideTotal");
-            }
+            this.clearProductData();
           }
 
           this.setSubmitStatus(message);
@@ -169,6 +170,15 @@ export default {
       this.errors = [];
       this.setSubmitStatus(null);
       Object.keys(this.form).forEach(key => this.form[key] = '');
+    },
+
+    clearProductData() {
+      this.resetForm();
+      if (localStorage.getItem('cart')) {
+        localStorage.removeItem('cart');
+        this.$store.dispatch("fillCart" , []);
+        this.$emit("hideTotal");
+      }
     },
 
     onValidate(response) {

@@ -13,7 +13,7 @@
     ._bottom(:class="{ 'product-item__bottom--full': +product.price === 0 }")
       ._info
         router-link(:to="{ name: 'product', params: { id: product.id }}")._title {{ product.title }}
-        router-link(:to="{ name: 'category', params: { slug: product.categories[0].slug }}" v-if="product.categories")._category  {{ product.categories[0].title}}
+        router-link(:to="{ name: 'category', params: { slug: productSlug }}" v-if="product.categories")._category  {{ productTitle }}
       template(v-if="+product.price > 0")
         ._amount
           ProductAmount(@changeAmount="changeAmount" :amount="amount")
@@ -68,6 +68,20 @@ export default {
         result = 100 - ((this.product.sale_price / this.product.price * 100).toFixed(0))
       }
       return "-" + result + "%";
+    },
+    productSlug() {
+      let slug = "#";
+      if (this.product.categories[0] && this.product.categories[0].slug) {
+        slug = this.product.categories[0].slug;
+      }
+      return slug;
+    },
+    productTitle() {
+      let title = null;
+      if (this.product.categories[0] && this.product.categories[0].title) {
+        title = this.product.categories[0].title;
+      }
+      return title;
     }
   },
   methods: {

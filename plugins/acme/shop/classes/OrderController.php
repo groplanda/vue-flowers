@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Log;
 use YooKassa\Model\Notification\NotificationSucceeded;
 use YooKassa\Model\Notification\NotificationWaitingForCapture;
 use YooKassa\Model\NotificationEventType;
-use Redirect;
 
 class OrderController extends Controller
 {
@@ -70,7 +69,6 @@ class OrderController extends Controller
 
       if($request->get('user_payment') == 1) { //online
         $products = $this->createProductArray($request->get('products'));
-
         $client = new Client();
         $client->setAuth(env('SHOP_ID'), env('KASSA_KEY')); // keys
         $payment = $client->createPayment(
@@ -81,7 +79,7 @@ class OrderController extends Controller
             ],
             'confirmation' => [
               'type' => 'redirect',
-              'return_url' => '/checkout/result',
+              'return_url' => 'orion.bardinteam.ru/checkout/result',
             ],
             'receipt' => [
               'customer' => [
@@ -94,8 +92,8 @@ class OrderController extends Controller
           uniqid('', true)
         );
         //вставка в базу данных
-        $this->insertData($vars, $payment['_id']);
-        return Redirect::to($payment['_confirmation']['confirmation_url']);
+        $this->insertData($request, $payment['_id']);
+        return response()->json(['status' => 'redirect', 'message' => $payment->getConfirmation()->getConfirmationUrl()]);
 
       } else {
         $this->insertData($request, null);
@@ -215,12 +213,16 @@ class OrderController extends Controller
   private function createProductArray($products) {
     $result = [];
     foreach($products as $product) {
+      $price = $product['price'].'.00';
+      if (isset($product['sale_price']) && !empty($product['sale_price'])) {
+        $price = $product['sale_price'].'.00';
+      }
       $result[] = [
         'description' => $product['title'],
         'quantity' => $product['amount'],
         'vat_code' => '2',
         'amount' => [
-          'value' => $product['sale_price'] ? $product['sale_price'].'.00' : $product['price'].'.00',
+          'value' => $price,
           'currency' => 'RUB'
         ],
         'payment_mode' => 'full_prepayment',
