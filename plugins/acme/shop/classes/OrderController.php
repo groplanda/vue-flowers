@@ -72,7 +72,7 @@ class OrderController extends Controller
         $products = $this->createProductArray($request->get('products'));
 
         $client = new Client();
-        $client->setAuth(env('SHOP_ID'), env('KASSA_KEY'));
+        $client->setAuth(env('SHOP_ID'), env('KASSA_KEY')); // keys
         $payment = $client->createPayment(
           [
             'amount' => [
