@@ -7,6 +7,8 @@ fields:
         label: Статус
         options:
             new: Новый
+            waiting: 'В ожидание оплаты'
+            canceled: 'Оплата отменена'
             pay: Оплачен
             work: 'В работе'
             finish: Выполнен
