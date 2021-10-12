@@ -28,10 +28,10 @@ export default {
   },
   computed: {
     popularProducts() {
-      return this.$store.getters.getNewProducts;
+      return this.$store.getters.getPopularProducts;
     },
     newProducts() {
-      return this.$store.getters.getPopularProducts;
+      return this.$store.getters.getNewProducts
     },
     settings() {
       return this.$store.getters.getSettings;

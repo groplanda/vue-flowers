@@ -5,6 +5,7 @@ import Home from '@vue/page/Home'
 import Category from '@vue/page/Category'
 import Cart from '@vue/page/Cart'
 import Checkout from '@vue/page/Checkout'
+import CheckoutResult from '@vue/page/CheckoutResult'
 import Product from '@vue/page/Product'
 import SearchPage from '@vue/page/SearchPage'
 import Tag from '@vue/page/Tag'
@@ -34,7 +35,12 @@ let router = new Router({
         {
           path: '/checkout',
           name: 'checkout',
-          component: Checkout
+          component: Checkout,
+        },
+        {
+          path: '/checkout-result',
+          name: 'checkoutResult',
+          component: CheckoutResult
         },
         {
           path: '/product/:id',

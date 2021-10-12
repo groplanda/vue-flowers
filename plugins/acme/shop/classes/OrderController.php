@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Log;
 
 use YooKassa\Model\Notification\NotificationSucceeded;
 use YooKassa\Model\Notification\NotificationWaitingForCapture;
+use YooKassa\Model\Notification\NotificationCanceled;
 use YooKassa\Model\NotificationEventType;
 
 class OrderController extends Controller
@@ -79,7 +80,7 @@ class OrderController extends Controller
             ],
             'confirmation' => [
               'type' => 'redirect',
-              'return_url' => 'orion.bardinteam.ru/checkout/result',
+              'return_url' => 'http://localhost:3000/checkout/result',
             ],
             'receipt' => [
               'customer' => [
@@ -149,29 +150,48 @@ class OrderController extends Controller
     if($source) {
       $requestBody = json_decode($source, true);
       try {
+        $order = $this->getOrderById($requestBody['object']['id']);
+        Mail::send('acme.shop::mail.payment_admin', $order, function($message) use ($order) {
+          $message->to($this->getUserMail(), 'Admin Person');
+          $message->subject('Заказ '. $order->name . ' успешно оплачен!');
+        });
+
+        if(isset($order->user_mail) && !empty($order->user_mail)) {
+          Mail::send('acme.shop::mail.payment_user', $order, function($message) use ($order) {
+            $message->to($order->user_mail, 'User Person');
+            $message->subject('Заказ '. $order->name . ' успешно оплачен!');
+          });
+        };
 
         if($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED) { // если оплачен
-          Log::info($requestBody['object']);
-          $order = $this->getOrderById($requestBody['object']['id']);
           $this->updateStatus($order->id);
-
-          Mail::send('acme.shop::mail.payment_admin', $order, function($message) use ($order) {
-            $message->to($this->getUserMail(), 'Admin Person');
-            $message->subject('Заказ '. $order->name .' успешно оплачен!');
-          });
-
-          if(isset($order->user_mail) && !empty($order->user_mail)) {
-            Mail::send('acme.shop::mail.payment_user', $order, function($message) use ($order) {
-              $message->to($order->user_mail, 'User Person');
-              $message->subject('Заказ '. $order->name .' успешно оплачен!');
-            });
-          };
-
         }
+
+        if($requestBody['event'] === NotificationEventType::PAYMENT_CANCELED) { // если отменен
+          Mail::send('acme.shop::mail.payment_canceled_admin', $order, function($message) use ($order) {
+            $message->to($this->getUserMail(), 'Admin Person');
+            $message->subject('Оплата '. $order->name . ' отменена');
+          });
+        }
+        Log::info($requestBody['object']);
       } catch (Exception $e) {
         Log::error($e);
       }
     }
+  }
+
+  public function getPayStatus($order_id)
+  {
+    $client = new Client();
+    $client->setAuth(env('SHOP_ID'), env('KASSA_KEY')); // keys
+
+    try {
+        $response = $client->getPaymentInfo($order_id);
+    } catch (\Exception $e) {
+        $response = $e;
+    }
+
+    dd($response);
   }
 
   private function getOrderById($id)
