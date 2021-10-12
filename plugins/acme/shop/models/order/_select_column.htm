@@ -1,5 +1,5 @@
 <?php
-$texts = ['new' => 'Новый', 'work' => 'В работе', 'pay' => 'Оплачен', 'finish' => 'Выполнен', 'close' => 'Закрыт'];
+$texts = ['new' => 'Новый', 'work' => 'В работе', 'pay' => 'Оплачен', 'finish' => 'Выполнен', 'close' => 'Закрыт',  'close' => 'Закрыт', 'waiting' => 'В ожидании оплаты', 'canceled' => 'Оплата отменена'];
 ?>
 <span class='<?= $value ?>'><?= $texts[$value] ?></span>
 <style>
@@ -29,5 +29,11 @@ $texts = ['new' => 'Новый', 'work' => 'В работе', 'pay' => 'Опла
   }
   .pay::before, .pay {
     color: #d23383;
+  }
+  .waiting::before, .waiting {
+    color: #6610ac;
+  }
+  .canceled::before, .canceled {
+    color: #161515;
   }
 </style>

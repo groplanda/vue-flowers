@@ -40,8 +40,7 @@ class Notification extends ComponentBase
           'name' => $order->name,
           'user_name' => $order->user_name,
           'user_mail' => $order->user_mail,
-          'user_phone' => $order->user_phone,
-          'user_pay_url' => 'https://yoomoney.ru/payments/checkout/confirmation?orderId=' + $requestBody['object']['id']
+          'user_phone' => $order->user_phone
         ];
 
         if ($requestBody['event'] === NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE && $order['status'] !== 'waiting') { // если в ожидании
@@ -73,15 +72,7 @@ class Notification extends ComponentBase
               $message->to($this->getUserMail(), 'Admin Person');
               $message->subject('Оплата '. $vars['name'] . ' отменена');
             });
-
-            if(isset($vars['user_mail']) && !empty($vars['user_mail'])) {
-              Mail::send('acme.shop::mail.payment_canceled_user', $vars, function($message) use ($vars) {
-                $message->to($vars['user_mail'], 'User Person');
-                $message->subject('Оплата: '. $vars['name']);
-              });
-            }
           }
-
         }
 
         Log::info($requestBody['object']);
