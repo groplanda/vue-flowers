@@ -8,7 +8,6 @@
 
 </template>
 <script>
-import axios from "axios";
 import ProductSlider from '@vue/components/ProductSlider/ProductSlider';
 
 export default {
@@ -21,16 +20,7 @@ export default {
       return this.$store.getters.getPopularProducts;
     },
   },
-  methods: {
-    fetchCheckoutData() {
-      axios.get("/api/checkout/yandex-kassa")
-        .catch(e => {
-          console.log(e);
-        })
-    }
-  },
   created() {
-    this.fetchCheckoutData();
     this.$store.dispatch('fetchPopularProducts');
   }
 }

@@ -99,6 +99,5 @@ Route::prefix('/api')->group(function () {
     return Stock::orderBy('sort_order', 'asc')->where('is_active', 1)->get();
   });
   Route::post('/add-comment', 'Acme\Shop\Classes\CommentController@add');
-  Route::get('/checkout/yandex-kassa', 'Acme\Shop\Classes\OrderController@notification');
   Route::get('/checkout/status/{order_id}', 'Acme\Shop\Classes\OrderController@getPayStatus');
 });

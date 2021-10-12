@@ -10,12 +10,6 @@ use Backend\Models\User;
 use Acme\Shop\Models\Order;
 use Acme\Settings\Models\Demand;
 use YooKassa\Client;
-use Illuminate\Support\Facades\Log;
-
-use YooKassa\Model\Notification\NotificationSucceeded;
-use YooKassa\Model\Notification\NotificationWaitingForCapture;
-use YooKassa\Model\Notification\NotificationCanceled;
-use YooKassa\Model\NotificationEventType;
 
 class OrderController extends Controller
 {
@@ -80,7 +74,7 @@ class OrderController extends Controller
             ],
             'confirmation' => [
               'type' => 'redirect',
-              'return_url' => 'http://localhost:3000/checkout/result',
+              'return_url' => 'https://orion.bardinteam.ru/checkout-result',
             ],
             'receipt' => [
               'customer' => [
@@ -144,42 +138,6 @@ class OrderController extends Controller
     return User::where('is_superuser', 1)->value('email');
   }
 
-  public function notification()
-  {
-    $source = file_get_contents('php://input');
-    if($source) {
-      $requestBody = json_decode($source, true);
-      try {
-        $order = $this->getOrderById($requestBody['object']['id']);
-        Mail::send('acme.shop::mail.payment_admin', $order, function($message) use ($order) {
-          $message->to($this->getUserMail(), 'Admin Person');
-          $message->subject('Заказ '. $order->name . ' успешно оплачен!');
-        });
-
-        if(isset($order->user_mail) && !empty($order->user_mail)) {
-          Mail::send('acme.shop::mail.payment_user', $order, function($message) use ($order) {
-            $message->to($order->user_mail, 'User Person');
-            $message->subject('Заказ '. $order->name . ' успешно оплачен!');
-          });
-        };
-
-        if($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED) { // если оплачен
-          $this->updateStatus($order->id);
-        }
-
-        if($requestBody['event'] === NotificationEventType::PAYMENT_CANCELED) { // если отменен
-          Mail::send('acme.shop::mail.payment_canceled_admin', $order, function($message) use ($order) {
-            $message->to($this->getUserMail(), 'Admin Person');
-            $message->subject('Оплата '. $order->name . ' отменена');
-          });
-        }
-        Log::info($requestBody['object']);
-      } catch (Exception $e) {
-        Log::error($e);
-      }
-    }
-  }
-
   public function getPayStatus($order_id)
   {
     $client = new Client();
@@ -192,17 +150,6 @@ class OrderController extends Controller
     }
 
     dd($response);
-  }
-
-  private function getOrderById($id)
-  {
-    return Order::where('order_id', $id)->first();
-  }
-
-  private function updateStatus($id) {
-    $order = Order::find($id);
-    $order->status = 'pay';
-    $order->save();
   }
 
   private function insertData($request, $u_id) {
