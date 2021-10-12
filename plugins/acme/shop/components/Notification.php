@@ -31,78 +31,67 @@ class Notification extends ComponentBase
 
   public function notificate()
   {
-    try {
-      $source = file_get_contents('php://input');
-      Log::info($source);
-      $data = json_decode($source, true);
-      $factory = new \YooKassa\Model\Notification\NotificationFactory();
-      $notificationObject = $factory->factory($data);
-      $responseObject = $notificationObject->getObject();
-      $order = $this->getOrderById($responseObject->getId());
+    $source = file_get_contents('php://input');
+    if($source) {
+      $requestBody = json_decode($source, true);
+      try {
+        $order = $this->getOrderById($requestBody['object']['id']);
+        $vars = [
+          'name' => $order->name,
+          'user_name' => $order->user_name,
+          'user_mail' => $order->user_mail,
+          'user_phone' => $order->user_phone,
+          'user_pay_url' => 'https://yoomoney.ru/payments/checkout/confirmation?orderId=' + $requestBody['object']['id']
+        ];
 
-      if ($notificationObject->getEvent() === NotificationEventType::PAYMENT_SUCCEEDED) {
-        $this->updateStatus($order->id);
-        Log::info($responseObject);
-        Mail::send('acme.shop::mail.payment_admin', $order, function($message) use ($order) {
-          $message->to($this->getUserMail(), 'Admin Person');
-          $message->subject('Заказ '. $order->name . ' успешно оплачен!');
-        });
+        if ($requestBody['event'] === NotificationEventType::PAYMENT_WAITING_FOR_CAPTURE && $order['status'] !== 'waiting') { // если в ожидании
+          $this->updateStatus($order['id'], 'waiting');
+        }
 
-        if(isset($order->user_mail) && !empty($order->user_mail)) {
-          Mail::send('acme.shop::mail.payment_user', $order, function($message) use ($order) {
-            $message->to($order->user_mail, 'User Person');
-            $message->subject('Заказ '. $order->name . ' успешно оплачен!');
-          });
-        };
+        if($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED) { // если оплачен
 
-      } elseif ($notificationObject->getEvent() === NotificationEventType::PAYMENT_CANCELED) {
-        Log::info($responseObject);
-        Mail::send('acme.shop::mail.payment_canceled_admin', $order, function($message) use ($order) {
-          $message->to($this->getUserMail(), 'Admin Person');
-          $message->subject('Оплата '. $order->name . ' отменена');
-        });
-      } else {
-        header('HTTP/1.1 400 Something went wrong');
-        exit();
+          if ($order['status'] !== 'pay') {
+            $this->updateStatus($order['id'], 'pay');
+            Mail::send('acme.shop::mail.payment_admin', $vars, function($message) use ($vars) {
+              $message->to($this->getUserMail(), 'Admin Person');
+              $message->subject($vars['name'] . ' успешно оплачен!');
+            });
+
+            if(isset($vars['user_mail']) && !empty($vars['user_mail'])) {
+              Mail::send('acme.shop::mail.payment_user', $vars, function($message) use ($vars) {
+                $message->to($vars['user_mail'], 'User Person');
+                $message->subject('Ваш '. $vars['name'] . ' успешно оплачен!');
+              });
+            };
+          }
+        }
+
+        if($requestBody['event'] === NotificationEventType::PAYMENT_CANCELED) { // если отменен
+          if ($order['status'] !== 'canceled') {
+            $this->updateStatus($order['id'], 'canceled');
+            Mail::send('acme.shop::mail.payment_canceled_admin', $vars, function($message) use ($vars) {
+              $message->to($this->getUserMail(), 'Admin Person');
+              $message->subject('Оплата '. $vars['name'] . ' отменена');
+            });
+
+            if(isset($vars['user_mail']) && !empty($vars['user_mail'])) {
+              Mail::send('acme.shop::mail.payment_canceled_user', $vars, function($message) use ($vars) {
+                $message->to($vars['user_mail'], 'User Person');
+                $message->subject('Оплата: '. $vars['name']);
+              });
+            }
+          }
+
+        }
+
+        Log::info($requestBody['object']);
+      } catch (Exception $e) {
+        Log::error($e);
       }
-
-    } catch (Exception $e) {
+    } else {
       header('HTTP/1.1 400 Something went wrong');
-      Log::error($e);
       exit();
     }
-    // $source = file_get_contents('php://input');
-    // if($source) {
-    //   $requestBody = json_decode($source, true);
-    //   try {
-    //     $order = $this->getOrderById($requestBody['object']['id']);
-    //     Mail::send('acme.shop::mail.payment_admin', $order, function($message) use ($order) {
-    //       $message->to($this->getUserMail(), 'Admin Person');
-    //       $message->subject('Заказ '. $order->name . ' успешно оплачен!');
-    //     });
-
-    //     if(isset($order->user_mail) && !empty($order->user_mail)) {
-    //       Mail::send('acme.shop::mail.payment_user', $order, function($message) use ($order) {
-    //         $message->to($order->user_mail, 'User Person');
-    //         $message->subject('Заказ '. $order->name . ' успешно оплачен!');
-    //       });
-    //     };
-
-    //     if($requestBody['event'] === NotificationEventType::PAYMENT_SUCCEEDED) { // если оплачен
-    //       $this->updateStatus($order->id);
-    //     }
-
-    //     if($requestBody['event'] === NotificationEventType::PAYMENT_CANCELED) { // если отменен
-    //       Mail::send('acme.shop::mail.payment_canceled_admin', $order, function($message) use ($order) {
-    //         $message->to($this->getUserMail(), 'Admin Person');
-    //         $message->subject('Оплата '. $order->name . ' отменена');
-    //       });
-    //     }
-    //     Log::info($requestBody['object']);
-    //   } catch (Exception $e) {
-    //     Log::error($e);
-    //   }
-    // }
   }
 
   private function getUserMail()
@@ -115,9 +104,9 @@ class Notification extends ComponentBase
     return Order::where('order_id', $id)->first();
   }
 
-  private function updateStatus($id) {
+  private function updateStatus($id, $status) {
     $order = Order::find($id);
-    $order->status = 'pay';
+    $order->status = $status;
     $order->save();
   }
 

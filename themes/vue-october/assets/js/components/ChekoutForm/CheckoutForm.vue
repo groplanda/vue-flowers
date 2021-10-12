@@ -123,7 +123,7 @@ export default {
     calculateSum() {
       let result = 0;
       this.products.forEach(product => {
-        result += Number(product.amount) * Number(product.price);
+        result += Number(product.amount) * Number(product.sale_price ? product.sale_price : product.price);
       })
       return result;
     },
