@@ -1,3 +1,4 @@
+@import './vars.scss';
 * {
   margin: 0;
   padding: 0;
@@ -98,3 +99,47 @@ button {
 .page {
   background: #fbf8ec;
 }
+
+svg {
+  display: inline-block;
+  vertical-align: baseline;
+  margin-bottom: -2px;
+  transition: fill 0.3s, stroke 0.3s;
+}
+
+.icon-react {
+  margin-top: 40px;
+  fill: #42b983;
+}
+
+@import './elements/header.scss';
+@import './elements/header-nav.scss';
+@import './elements/mini-cart.scss';
+@import './elements/mobile-nav.scss';
+@import './elements/search-form.scss';
+@import './elements/popup.scss';
+@import './elements/page.scss';
+@import './elements/account.scss';
+@import './elements/contact-form.scss';
+@import './elements/checkout-form.scss';
+@import './elements/advantages.scss';
+@import './elements/cart-item.scss';
+@import './elements/cart-table.scss';
+@import './elements/cart-total.scss';
+@import './elements/categories.scss';
+@import './elements/category.scss';
+@import './elements/filters.scss';
+@import './elements/footer.scss';
+@import './elements/post.scss';
+@import './elements/special.scss';
+@import './elements/slider.scss';
+@import './elements/filter.scss';
+@import './elements/product-amount.scss';
+@import './elements/product-slider.scss';
+@import './elements/product-item.scss';
+@import './elements/product-tab.scss';
+@import './elements/product-price.scss';
+@import './elements/product-popup.scss';
+@import './elements/product-comment.scss';
+@import './elements/cart.scss';
+@import './elements/product.scss';

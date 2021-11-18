@@ -16,9 +16,13 @@ fields:
         type: dropdown
     ip:
         label: 'IP адрес'
-        span: full
+        span: auto
         placeholder: ''
         default: 127.0.0.1
+        type: text
+    total:
+        label: 'Итоговая сумма'
+        span: auto
         type: text
 tabs:
     fields:
@@ -80,3 +84,12 @@ tabs:
                         imageHeight: '80'
                         span: auto
                         type: mediafinder
+        user:
+            label: 'Покупатель из кабинета'
+            nameFrom: name
+            descriptionFrom: description
+            select: 'concat(name, '' '', email)'
+            span: full
+            readOnly: 1
+            type: relation
+            tab: Юзер

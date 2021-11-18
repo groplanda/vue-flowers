@@ -45,3 +45,9 @@
 1.0.16:
     - 'Updated table acme_shop_comment'
     - builder_table_update_acme_shop_comment.php
+1.0.17:
+    - 'Updated table acme_shop_orders'
+    - builder_table_update_acme_shop_orders_2.php
+1.0.18:
+    - 'Updated table acme_shop_orders'
+    - builder_table_update_acme_shop_orders_3.php

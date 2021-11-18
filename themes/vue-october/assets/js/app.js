@@ -12,9 +12,10 @@ document.addEventListener("DOMContentLoaded", function() {
   document.querySelector('[data-static-page]').remove();
 })
 
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App }
+store.dispatch('init').then(() => {
+  new Vue({
+    store,
+    router,
+    render: h => h(App),
+  }).$mount('#app')
 })

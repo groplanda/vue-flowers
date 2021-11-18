@@ -4,6 +4,7 @@ import cart from './cart';
 import product from './product';
 import category from './category';
 import navbar from './navbar';
+import user from './user';
 import axios from 'axios';
 
 Vue.use(Vuex)
@@ -90,12 +91,22 @@ export default new Vuex.Store({
       .catch(err => {
         console.log(err);
       })
-    }
+    },
+    init({ commit }) {
+      return new Promise((resolve) => {
+        axios.get('/api/user/isUserLogin')
+        .then(response => {
+          commit("SET_USER", response.data)
+        })
+        .then(() => resolve());
+      })
+    },
   },
   modules: {
     cart,
     product,
     category,
-    navbar
+    navbar,
+    user
   }
 })

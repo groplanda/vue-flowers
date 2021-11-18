@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import authGuard from './auth-guard.js'
 
 import Home from '@vue/page/Home'
 import Category from '@vue/page/Category'
@@ -11,8 +12,11 @@ import Tag from '@vue/page/Tag'
 import Notfound from '@vue/page/Notfound'
 import Post from '@vue/page/PostPage'
 import Stocks from '@vue/page/Stocks'
+import Account from '@vue/page/Account'
+import ResetPassword from '@vue/page/ResetPassword'
 
 Vue.use(Router);
+
 let router = new Router({
     mode: 'history',
     routes: [
@@ -60,6 +64,19 @@ let router = new Router({
           path: '/stocks',
           name: 'stocks',
           component: Stocks
+        },
+        {
+          path: '/account',
+          name: 'account',
+          component: Account,
+          props: true,
+          beforeEnter: authGuard,
+        },
+        {
+          path: '/reset-password',
+          name: 'reset-password',
+          component: ResetPassword,
+          props: true,
         },
         {
           path: '/404',

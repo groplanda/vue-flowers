@@ -4,8 +4,8 @@
       ._heading
         ._title Оформление заказа
       ._row
-        CheckoutForm(:products="products" @hideTotal="showCartTotal = false")
-        CartTotal(v-if="showCartTotal" :products="products" :showBtn="false" className="checkout")
+        CheckoutForm(:products="products" @hideTotal="showCartTotal = false" :total="total")
+        CartTotal(v-if="showCartTotal" :price="{ sum, sale, total }" :showBtn="false" className="checkout")
 
 </template>
 <script>
@@ -27,6 +27,33 @@ export default {
     products() {
       return this.$store.getters.getCartProducts;
     },
+    sum() {
+      return this.calcSum();
+    },
+    sale() {
+      return this.calcSaleSum();
+    },
+    total() {
+      return Number(this.sum) - Number(this.sale);
+    }
+  },
+  methods: {
+    calcSum() {
+      let result = 0;
+      this.products.forEach(product => {
+        result += Number(product.amount) * Number(product.price);
+      })
+      return result;
+    },
+    calcSaleSum() {
+      let result = 0;
+      this.products.forEach(product => {
+        if (+product.sale_price !== 0) {
+          result += (Number(product.price) - Number(product.sale_price)) * Number(product.amount);
+        }
+      })
+      return result;
+    }
   },
   created() {
     const cart = this.$store.getters.getCart;

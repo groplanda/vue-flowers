@@ -6,7 +6,7 @@
         ._title Корзина
       ._row(v-if="products.length > 0")
         CartTable(:products="products")
-        CartTotal(:products="products")
+        CartTotal(:price="{ sum, sale, total }")
       ._empty(v-else)
         ._empty-inner
           ._empty-text Корзина пуста!
@@ -31,6 +31,33 @@ export default {
     },
     loading() {
       return this.$store.getters.getLoading;
+    },
+    sum() {
+      return this.calcSum();
+    },
+    sale() {
+      return this.calcSaleSum();
+    },
+    total() {
+      return Number(this.sum) - Number(this.sale);
+    }
+  },
+  methods: {
+    calcSum() {
+      let result = 0;
+      this.products.forEach(product => {
+        result += Number(product.amount) * Number(product.price);
+      })
+      return result;
+    },
+    calcSaleSum() {
+      let result = 0;
+      this.products.forEach(product => {
+        if (+product.sale_price !== 0) {
+          result += (Number(product.price) - Number(product.sale_price)) * Number(product.amount);
+        }
+      })
+      return result;
     }
   },
   created() {
@@ -41,90 +68,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-@import '@/scss/vars.scss';
-.cart {
-  padding: 50px 0 100px;
-  background: #fbf8ec;
-
-  @media(max-width: 767px) {
-    padding: 30px 0 50px;
-  }
-  $root: &;
-
-  &__heading {
-    margin-bottom: 60px;
-    @media(max-width: 1199px) {
-      margin-bottom: 40px;
-    }
-    @media(max-width: 767px) {
-      margin-bottom: 30px;
-    }
-  }
-
-  &__title {
-    font-size: 60px;
-    color: $primary;
-    font-weight: bold;
-    @media(max-width: 1199px) {
-      font-size: 50px;
-    }
-    @media(max-width: 767px) {
-      font-size: 40px;
-    }
-    @media(max-width: 575px) {
-      font-size: 30px;
-    }
-  }
-
-  &__row {
-    display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  &__empty {
-    max-width: 480px;
-    width: 100%;
-    border-radius: 20px;
-    padding: 30px;
-    background: $blue;
-    box-shadow: 0 10px 29px 0 $shadow;
-    margin: 0 auto;
-
-    @media(max-width: 767px) {
-      padding: 20px;
-    }
-  }
-
-  &__empty-inner {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    @media(max-width: 575px) {
-      flex-direction: column;
-    }
-  }
-
-  &__empty-text {
-    font-weight: 500;
-    font-size: 20px;
-    color: #fff;
-    margin-right: 15px;
-    @media(max-width: 575px) {
-      font-size: 16px;
-      margin: 0 0 10px 0;
-    }
-  }
-
-  &__empty-link {
-    color: #cbcbd0;
-    font-size: 16px;
-    @media(max-width: 575px) {
-      font-size: 14px;
-    }
-  }
-}
-</style>

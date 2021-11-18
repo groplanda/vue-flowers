@@ -23,4 +23,8 @@ class Order extends Model
     ];
 
     protected $jsonable = ['products'];
+
+    public $belongsTo  = [
+      'user' => [\RainLab\User\Models\User::class, 'key' => 'user_id']
+    ];
 }

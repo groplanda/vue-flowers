@@ -99,4 +99,24 @@ Route::prefix('/api')->group(function () {
     return Stock::orderBy('sort_order', 'asc')->where('is_active', 1)->get();
   });
   Route::post('/add-comment', 'Acme\Shop\Classes\CommentController@add');
+
+  Route::post('/user/register', 'Acme\Shop\Classes\UserController@register')->middleware('web');
+  Route::post('/user/auth', 'Acme\Shop\Classes\UserController@auth')->middleware('web');
+  Route::get('/user/isUserLogin', 'Acme\Shop\Classes\UserController@isUserLogin');
+  Route::post('/user/reset-password', 'Acme\Shop\Classes\UserController@resetPassword');
+  Route::post('/user/restore-password', 'Acme\Shop\Classes\UserController@restorePassword');
+
+  Route::group(['middleware' => 'RainLab\User\Classes\AuthMiddleware'], function () {
+    Route::get('/user/userdata', 'Acme\Shop\Classes\UserController@userdata');
+    Route::get('/user/logout', 'Acme\Shop\Classes\UserController@logout');
+    Route::get('/user/orders', 'Acme\Shop\Classes\UserController@userOrders');
+    Route::post('/user/edit', 'Acme\Shop\Classes\UserController@userEdit');
+    Route::post('/user/change-password', 'Acme\Shop\Classes\UserController@userChangePassword');
+
+    Route::post('/user/wish', 'Acme\Shop\Classes\WishController@wish');
+    Route::post('/user/check-wish', 'Acme\Shop\Classes\WishController@checkwish');
+    Route::get('/user/wish/{user}', 'Acme\Shop\Classes\WishController@wishlist');
+    Route::get('/user/wish-count/{user}', 'Acme\Shop\Classes\WishController@wishcount');
+  });
+
 });

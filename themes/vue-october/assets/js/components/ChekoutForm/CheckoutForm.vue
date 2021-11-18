@@ -20,7 +20,7 @@
         ._group
           input(
             type="text"
-            v-model="form.user_mail"
+            v-model="form.user_email"
             placeholder="E-mail"
             :class="{ 'checkout-form__input--error': emailErr }")._input
           span._error( v-if="emailErr") {{ emailErr }}
@@ -59,14 +59,19 @@ export default {
     products: {
       type: Array,
       required: true
+    },
+    total: {
+      type: Number,
+      requred: true
     }
   },
   data() {
     return {
       form: {
+        user_id: null,
         user_name: "",
         user_phone: "",
-        user_mail: "",
+        user_email: "",
         user_address: "",
         user_comment: ""
       },
@@ -90,7 +95,7 @@ export default {
     },
 
     emailErr() {
-      return checkErr('user_mail', this.errors);
+      return checkErr('user_email', this.errors);
     },
 
     commentErr() {
@@ -99,6 +104,23 @@ export default {
 
     submitMsg () {
       return this.submitStatus;
+    },
+
+    isLogin() {
+      return this.$store.getters.getUser;
+    },
+
+    userData() {
+      return this.$store.getters.getUserData;
+    }
+
+  },
+  watch: {
+    userData() {
+      const user = this.userData;
+      if (user) {
+        this.fillUserData(user);
+      }
     }
   },
   methods: {
@@ -108,6 +130,7 @@ export default {
 
       this.setSubmitStatus("Заказ отправляется...");
       this.form.products = this.products;
+      this.form.total = this.total;
 
       axios.post('api/add-order', this.form)
         .then(response => {
@@ -154,135 +177,21 @@ export default {
     closePopup() {
       this.popup = false;
       this.setSubmitStatus(null);
+    },
+
+    fillUserData(userData) {
+      const USER_KEYS = ['id', 'name', 'email', 'phone', 'address'];
+      USER_KEYS.forEach(key => {
+        if (userData[key]) {
+          this.form[`user_${key}`] = userData[key];
+        }
+      })
+    },
+  },
+  created() {
+    if (this.isLogin) {
+      this.$store.dispatch("fetchUserdata");
     }
   }
 }
 </script>
-<style lang="scss">
-@import '@/scss/vars.scss';
-.checkout-form {
-  width: 100%;
-  max-width: calc(100% - 445px);
-
-  @media(max-width: 1440px) {
-    max-width: calc(100% - 370px);
-  }
-
-  @media(max-width: 1199px) {
-    max-width: calc(100% - 340px);
-  }
-
-  @media(max-width: 767px) {
-    max-width: 100%;
-  }
-
-  $root: &;
-
-  &__inner {
-    background: #f8f8f8;
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 10px 29px 0 $shadow;
-
-    @media(max-width: 767px) {
-      padding: 12px;
-      border-radius: 7px;
-    }
-  }
-
-  &__row {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -10px 30px -10px;
-
-    @media(max-width: 991px) {
-      margin: 0 0 30px 0;
-    }
-  }
-
-  &__group {
-    width: 100%;
-    max-width: calc(50% - 20px);
-    margin: 0 10px 20px;
-    position: relative;
-
-    &--full {
-      max-width: calc(100% - 20px);
-    }
-
-    @media(max-width: 991px) {
-      max-width: 100%;
-    }
-  }
-
-  &__input {
-    color: $primary;
-    font-size: 16px;
-    background: #f8f8f8;
-    border: 2px solid $borderColor;
-    border-radius: 10px;
-    padding: 0 20px;
-    width: 100%;
-    height: 50px;
-    outline: none;
-    transition: all 0.18s linear;
-
-    &--error {
-      border-color: $red;
-    }
-
-    &::placeholder {
-      color: $primary;
-    }
-
-    &--textarea {
-      height: 140px;
-      resize: none;
-      padding: 12px 20px;
-    }
-
-    @media(max-width: 767px) {
-      height: 40px;
-      border-width: 1px;
-    }
-  }
-
-  &__error {
-    color: $red;
-    font-size: 13px;
-    line-height: 21px;
-    font-weight: 500;
-    @media(max-width: 767px) {
-      font-size: 12px;
-      line-height: 18px;
-    }
-  }
-
-  &__btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    font-size: 15px;
-    font-weight: 500;
-    padding: 15px 60px;
-    background: $blue;
-    border-radius: 7px;
-    transition: background .2s ease;
-
-    &:disabled, &[disabled] {
-      background: $secondary;
-      cursor: not-allowed;
-    }
-  }
-
-  &__status {
-    color: $primary;
-    margin-top: 10px;
-    font-size: 14px;
-    line-height: 18px;
-    font-weight: 500;
-  }
-
-}
-</style>

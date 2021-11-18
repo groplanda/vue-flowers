@@ -8,19 +8,27 @@
             ._menu-text меню
           ._nav
             router-link(:to="link.url" v-for="(link, idx) in navbar" :key="idx" :class="link.class")._nav-link {{ link.title }}
-          ._cart
-            ._cart-heading(@click="showMiniCart = !showMiniCart")
-              ._cart-val
-                icon(name="cart" component="header")._cart-ico
-                ._cart-count {{ cart }}
-              ._cart-sum {{ cart ? totalPrice + ' ₽' : 'Корзина пуста!' }}
-            MiniCart(
-              v-if="showMiniCart"
-              @deleteProduct="deleteProduct"
-              @closeMiniCart="showMiniCart = false"
-              :products="products"
-              :cart="cart"
-              )
+            a(v-if="!isLogin" href="#!" @click.prevent="popup = true")._nav-link Войти/Зарегистрироваться
+            router-link(v-else :to="{name: 'account' }")._nav-link Личный кабинет
+          ._right
+            ._person
+              a(v-if="!isLogin" href="#!" @click.prevent="popup = true")._person-link
+                icon(name="person" component="header")._person-ico
+              router-link(v-else :to="{name: 'account' }")._person-link
+                icon(name="person" component="header")._person-ico
+            ._cart
+              ._cart-heading(@click="showMiniCart = !showMiniCart")
+                ._cart-val
+                  icon(name="cart" component="header")._cart-ico
+                  ._cart-count {{ cart }}
+                ._cart-sum {{ cart ? totalPrice + ' ₽' : 'Корзина пуста!' }}
+              MiniCart(
+                v-if="showMiniCart"
+                @deleteProduct="deleteProduct"
+                @closeMiniCart="showMiniCart = false"
+                :products="products"
+                :cart="cart"
+                )
     ._center
       ._container.container
         ._center-row
@@ -47,6 +55,22 @@
                   icon(name="instagram" component="footer")._messenger-ico
     HeaderNav(:categories="categories")
     MobileNav(:showMobileNav="showMobileNav" @closeNav="showMobileNav = false" :categories="categories" :navbar="navbar")
+    Popup(v-if="popup" @close="closePopup")
+      ._popup-tabs
+        ._popup-tabs-heading(v-if="tabIndex === 2")
+          ._popup-tabs-title Восстановление пароля
+        ._popup-tabs-heading(v-else)
+          ._popup-tabs-title(@click="tabIndex = 0" :class="{ 'header__popup-tabs-title_active': tabIndex === 0 }") Войти
+          ._popup-tabs-title(@click="tabIndex = 1" :class="{ 'header__popup-tabs-title_active': tabIndex === 1 }") Зарегистрироваться
+        ._popup-tabs-body
+          Auth(v-if="tabIndex === 0" @close="closePopup" @forget="tabIndex = 2")
+          Register(v-if="tabIndex === 1" @close="closePopup")
+          ForgetPassword(v-if="tabIndex === 2" @close="closePopup" @remember="tabIndex = 0")
+    Popup(v-if="popupLogout" @close="popupLogout = false")
+      .success
+        icon(name="checked" component="form")._ico
+        ._message Вы успешно вышли <br>из личного кабинета
+
 
 </template>
 <script>
@@ -54,13 +78,21 @@ import MiniCart from './MiniCart';
 import HeaderNav from './HeaderNav';
 import MobileNav from './MobileNav';
 import { formattedPhone } from '@vue/helpers/formatted.js';
+import Popup from '@vue/components/Popup/Popup';
+import Auth from '@vue/components/User/Auth';
+import Register from '@vue/components/User/Register';
+import ForgetPassword from '@vue/components/User/ForgetPassword';
 
 export default {
   name: "Header",
   components: {
     MiniCart,
     HeaderNav,
-    MobileNav
+    MobileNav,
+    Popup,
+    Auth,
+    Register,
+    ForgetPassword
   },
   props: {
     settings: {
@@ -109,12 +141,18 @@ export default {
         }
       });
       return result.toLocaleString('ru');
+    },
+    isLogin() {
+      return this.$store.getters.getUser;
     }
   },
   data() {
     return {
       showMiniCart: false,
       showMobileNav: false,
+      popup: false,
+      tabIndex: 0,
+      popupLogout: false
     }
   },
   methods: {
@@ -132,389 +170,39 @@ export default {
     },
     preparePhone(phone) {
       return formattedPhone(phone);
+    },
+    closePopup() {
+      this.popup = false;
+    },
+    failAuth() {
+      if (this.$route.query.auth === "false") {
+        this.popup = true;
+        this.$router.replace({
+          query: {}
+        });
+      }
+    },
+    logoutAuth() {
+      if (this.$route.query.auth === "logout") {
+        this.popupLogout = true;
+        this.$router.replace({
+          query: {}
+        });
+      }
     }
   },
   created() {
     this.fetchProductsByIds();
+  },
+  mounted() {
+    if (this.$route.query) {
+      this.failAuth();
+    }
+  },
+  updated() {
+    if (this.$route.query) {
+      this.logoutAuth();
+    }
   }
 }
 </script>
-<style lang="scss">
-@import '@/scss/vars.scss';
-.header {
-
-  $root: &;
-
-  &__top {
-    width: 100%;
-    background: #fbf8ec;
-    display: flex;
-    justify-content: center;
-  }
-
-  &__top-row {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  &__menu {
-    display: none;
-    @media(max-width: 767px) {
-      display: flex;
-      align-items: center;
-
-    }
-  }
-
-  &__menu-ico {
-    width: 18px;
-    height: 12px;
-    color: $blue;
-  }
-
-  &__menu-text {
-    color: $blue;
-    font-size: 14px;
-    font-weight: 500;
-    line-height: 14px;
-    margin: 1px 0 0 10px;
-  }
-
-  &__nav {
-    width: 100%;
-    max-width: 610px;
-    padding: 17px 0;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-
-    @media(max-width: 991px) {
-      max-width: calc(100% - 180px);
-    }
-
-    @media(max-width: 767px) {
-      display: none;
-    }
-  }
-
-  &__nav-link {
-    font-size: 15px;
-    text-decoration: none;
-    display: block;
-    color: $primary;
-    font-weight: 300;
-    margin-right: 13px;
-
-    @media(max-width: 991px) {
-      font-size: 14px;
-      margin-right: 10px;
-    }
-
-    &--tablet-link {
-      display: none;
-      @media(max-width: 991px) {
-        display: block;
-      }
-    }
-
-    &:hover {
-      color: $blue;
-    }
-
-    &:last-child {
-      margin: 0;
-    }
-  }
-
-  &__cart {
-    width: 100%;
-    max-width: 180px;
-    position: relative;
-
-    @media(max-width: 767px) {
-      max-width: 40px;
-    }
-  }
-
-  &__cart-heading {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 15px 0 15px 50px;
-    cursor: pointer;
-    @media(max-width: 767px) {
-      padding: 0;
-      width: 40px;
-      height: 45px;
-    }
-  }
-
-  &__cart-val {
-    position: absolute;
-    left: 5px;
-    top: calc(50% - 13px);
-
-    @media(max-width: 767px) {
-      left: 0;
-    }
-  }
-
-  &__cart-ico {
-    width: 26px;
-    height: 26px;
-    fill: $blue;
-
-    @media(max-width: 767px) {
-      width: 20px;
-      height: 20px;
-    }
-  }
-
-  &__cart-count {
-    color: #fff;
-    font-size: 10px;
-    font-weight: 300;
-    line-height: 1;
-    border-radius: 50%;
-    background: $red;
-    width: 18px;
-    height: 18px;
-    text-align: center;
-    position: absolute;
-    left: 15px;
-    top: -2px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    @media(max-width: 767px) {
-      left: 10px;
-    }
-  }
-
-  &__cart-sum {
-    color: $primary;
-    font-size: 18px;
-    line-height: 1;
-    font-weight: 600;
-    cursor: pointer;
-    @media(max-width: 991px) {
-      font-size: 16px;
-    }
-    @media(max-width: 767px) {
-      display: none;
-    }
-  }
-
-  &__center {
-    padding: 10px 0 15px;
-    display: flex;
-    justify-content: center;
-  }
-
-  &__center-row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-  }
-
-  &__logo-url {
-    @media(max-width: 575px) {
-      margin: 0 auto;
-    }
-  }
-
-  &__logo {
-    display: flex;
-    width: 100%;
-    max-width: 300px;
-    margin-right: 20px;
-
-    @media(max-width: 1199px) {
-      max-width: 200px;
-    }
-  }
-
-  &__content {
-    width: 100%;
-    max-width: 790px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    @media(max-width: 1199px) {
-      max-width: 690px;
-    }
-
-    @media(max-width: 991px) {
-      max-width: calc(100% - 220px);
-    }
-
-    @media(max-width: 575px) {
-       max-width: 100%;
-    }
-  }
-
-  &__link-list {
-    display: flex;
-    flex-wrap: wrap;
-
-    @media(max-width: 991px) {
-      display: none;
-    }
-  }
-
-  &__link-item {
-    display: flex;
-    align-items: center;
-    padding: 13px 25px;
-    font-size: 16px;
-    font-weight: 600;
-    line-height: 1.2;
-
-    &--gift {
-      background: #fff6f7;
-      color: $red;
-
-      #{$root} {
-        &__link-ico {
-          fill: $red;
-        }
-      }
-    }
-
-    &--delivery {
-      background: #fff6f1;
-      color: $brown;
-      margin-left: 10px;
-
-      #{$root} {
-        &__link-ico {
-          fill: $brown;
-        }
-      }
-    }
-
-    @media(max-width: 1199px) {
-      font-size: 15px;
-    }
-  }
-
-  &__link-ico {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-
-    @media(max-width: 1199px) {
-      margin-right: 5px;
-    }
-  }
-
-  &__contacts {
-    padding: 0 0 0 35px;
-    width: 100%;
-    max-width: 240px;
-    margin: 6px 0 0 10px;
-    position: relative;
-    @media(max-width: 991px) {
-      margin-left: auto;
-      padding-left: 30px;
-    }
-    @media(max-width: 575px) {
-      margin: 15px 0 0;
-      padding: 0;
-      text-align: center;
-      max-width: 100%;
-    }
-  }
-
-  &__contacts-ico {
-    fill: $primary;
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    top: 2px;
-    left: 0;
-    @media(max-width: 991px) {
-      width: 18px;
-      height: 18px;
-    }
-    @media(max-width: 575px) {
-      display: none;
-    }
-  }
-
-  &__contact-city {
-    color: $primary;
-    font-size: 15px;
-    font-weight: 300;
-    margin-bottom: 5px;
-    @media(max-width: 991px) {
-      font-size: 14px;
-    }
-  }
-
-  &__contact-phone {
-    display: block;
-    color: $primary;
-    font-size: 20px;
-    font-weight: 700;
-    @media(max-width: 991px) {
-      font-size: 18px;
-    }
-  }
-
-  &__messenger {
-    margin-top: 5px;
-    display: flex;
-    flex-wrap: wrap;
-    @media(max-width: 767px) {
-      justify-content: center;
-    }
-  }
-
-  &__messenger-link {
-    width: 34px;
-    height: 34px;
-    margin-right: 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 17px;
-
-    &--wa {
-      background: #25D366;
-    }
-
-    &--viber {
-      background: #665CAC;
-    }
-
-    &--instagram {
-      background: #b55928;
-
-      #{$root} {
-        &__messenger-ico {
-          width: 18px;
-          height: 18px;
-        }
-      }
-    }
-
-    &:last-child {
-      margin-right: 0;
-    }
-  }
-
-  &__messenger-ico {
-    width: 16px;
-    height: 16px;
-    fill: #fff;
-    color: #FFF;
-    margin: 0;
-  }
-}
-</style>
