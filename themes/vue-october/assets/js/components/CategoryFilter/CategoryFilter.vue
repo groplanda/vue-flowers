@@ -9,7 +9,7 @@
           ._sorting-item(v-for="item in filterVars" :key="item.key" @click="onSorting(item)") {{ item.title }}
     ._buttons
       button._btn(type="button" @click="openPopup('Получить прайс-лист')") Прайс-лист
-      button._btn(type="button" @click="openPopup('Рассчитать стоимость заказа')") Рассчитать стоимость заказа
+      button._btn(type="button" data-modal="openQuiz") Рассчитать стоимость заказа
       button._btn(type="button" @click="openPopup('Консультация специалиста')") Консультация специалиста
 
     Popup(v-if="popup" @close="popup = false")
@@ -52,6 +52,35 @@ export default {
       this.selectedBtn = val;
       this.popup = true;
     }
+  },
+  mounted() {
+     const quizBtn = this.$el.querySelector('[data-modal="openQuiz"]');
+
+    (function(w, d, s, o){
+      var j = d.createElement(s); j.async = true; j.src = '//script.marquiz.ru/v2.js';j.onload = function() {
+        // eslint-disable-next-line no-undef
+        if (document.readyState !== 'loading') Marquiz.init(o);
+        else document.addEventListener("DOMContentLoaded", function() {
+          // eslint-disable-next-line no-undef
+          Marquiz.init(o);
+        });
+      };
+      d.head.insertBefore(j, d.head.firstElementChild);
+    })(window, document, 'script', {
+        host: '//quiz.marquiz.ru',
+        region: 'eu',
+        id: '61c99986d56678004f0ab6ba',
+        autoOpen: false,
+        autoOpenFreq: 'once',
+        openOnExit: false,
+        disableOnMobile: false
+      }
+    );
+    quizBtn.addEventListener("click", () => {
+      // eslint-disable-next-line no-undef
+      Marquiz.showModal('61c99986d56678004f0ab6ba');
+    })
+
   }
 }
 </script>
