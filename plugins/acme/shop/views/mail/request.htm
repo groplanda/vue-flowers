@@ -1,0 +1,18 @@
+<p>
+Новое сообщение от <b>{{ user_name }}</b> - <b>{{ user_phone }}</b>
+</p>
+{% if user_mail %}
+<p>
+    E-mail: {{ user_mail }}
+</p>
+{% endif %}
+{% if user_adress %}
+<p>
+    Адрес: {{ user_adress }}
+</p>
+{% endif %}
+{% if user_message %}
+<p>
+    Комментарий: {{ user_message }}
+</p>
+{% endif %}
