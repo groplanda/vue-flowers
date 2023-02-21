@@ -1,0 +1,10 @@
+name: Promos
+form: $/acme/settings/models/promo/fields.yaml
+modelClass: Acme\Settings\Models\Promo
+defaultRedirect: acme/settings/promos
+create:
+    redirect: 'acme/settings/promos/update/:id'
+    redirectClose: acme/settings/promos
+update:
+    redirect: acme/settings/promos
+    redirectClose: acme/settings/promos

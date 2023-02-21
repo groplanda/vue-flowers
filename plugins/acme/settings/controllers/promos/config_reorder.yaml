@@ -1,0 +1,4 @@
+title: Promos
+modelClass: Acme\Settings\Models\Promo
+toolbar:
+    buttons: reorder_toolbar

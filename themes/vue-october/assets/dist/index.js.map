@@ -1,0 +1,1 @@
+{"version":3,"file":"/dist/index.js","mappings":"AAAAA,SAASC,iBAAiB,oBAAoB,WAE9C","sources":["webpack://octobercms/./themes/vue-october/assets/js/index.js"],"sourcesContent":["document.addEventListener('DOMContentLoaded', () => {\n\n});\n"],"names":["document","addEventListener"],"sourceRoot":""}

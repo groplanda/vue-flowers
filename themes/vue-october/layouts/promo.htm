@@ -1,0 +1,25 @@
+description = "Promo layout"
+==
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>{{ this.theme.site_name }} - {{ this.page.title }}</title>
+        <meta name="description" content="{{ this.page.meta_description }}">
+        <meta name="title" content="{{ this.page.meta_title }}">
+        <meta name="author" content="OctoberCMS">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="generator" content="OctoberCMS">
+        <link rel="icon" type="image/png" href="{{ 'assets/images/october.png'|theme }}">
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+        <link href="{{ 'assets/dist/index.css'|theme }}" rel="stylesheet">
+        {% styles %}
+    </head>
+    <body>
+        {% page %}
+        <!-- Scripts -->
+        <script src="{{ 'assets/dist/index.js'|theme }}"></script>
+        {% scripts %}
+    </body>
+</html>

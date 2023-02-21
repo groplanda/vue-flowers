@@ -73,6 +73,18 @@ tabs:
         cssClass: col-md-4
         tab: Контакты
         placeholder: https://www.instagram.com
+      inn:
+          type: text
+          label: ИНН
+          span: storm
+          cssClass: col-md-4
+          tab: Контакты
+      ogrn:
+          type: text
+          label: ОГРН
+          span: storm
+          cssClass: col-md-4
+          tab: Контакты
 
       site_name:
         type: text

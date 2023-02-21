@@ -30,3 +30,7 @@ navigation:
                 label: Акции
                 url: acme/settings/stocks
                 icon: icon-star
+            side-menu-promo:
+                label: Баннеры
+                url: acme/settings/promos
+                icon: icon-tags

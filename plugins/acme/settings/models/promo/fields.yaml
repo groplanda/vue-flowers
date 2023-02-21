@@ -1,0 +1,45 @@
+fields:
+    name:
+        label: Заголовок
+        span: auto
+        type: text
+    is_active:
+        label: 'Активен?'
+        span: auto
+        type: switch
+    description:
+        label: Описание
+        size: large
+        span: full
+        type: textarea
+    image:
+        label: Фото
+        mode: image
+        imageWidth: '150'
+        imageHeight: '100'
+        useCaption: true
+        thumbOptions:
+            mode: crop
+            extension: auto
+        span: auto
+        type: fileupload
+tabs:
+    fields:
+        feature:
+            label: Свойства
+            prompt: Добавить
+            style: default
+            span: full
+            type: repeater
+            tab: Свойства
+            form:
+                fields:
+                    image:
+                        label: Иконка
+                        mode: image
+                        span: auto
+                        type: mediafinder
+                    value:
+                        label: Описание
+                        span: auto
+                        type: text
