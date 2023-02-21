@@ -1,5 +1,14 @@
 description = "Promo layout"
 ==
+<?php
+function onStart()
+{
+    $styleAsset = 'assets/dist/index.css';
+    $lastUpdate = filemtime($this->theme->getPath() . '/' . $styleAsset);
+    $this['stylesheet'] = sprintf('%s?v=%s', $this->controller->themeUrl($styleAsset), $lastUpdate);
+}
+?>
+==
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,7 +22,7 @@ description = "Promo layout"
         <link rel="icon" type="image/png" href="{{ 'assets/images/october.png'|theme }}">
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-        <link href="{{ 'assets/dist/index.css'|theme }}" rel="stylesheet">
+        <link href="{{stylesheet}}" rel="stylesheet" />
         {% styles %}
     </head>
     <body>
