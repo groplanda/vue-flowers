@@ -34,7 +34,7 @@
                                 <source srcset="{{feature.image|media}}">
                                 <img src="{{feature.image|media}}" alt="{{feature.value}}" class="promo__feature-ico" />
                             </picture>
-                            <div class="promo__feature-value">{{feature.value}}</div>
+                            <div class="promo__feature-value">{{feature.value|raw}}</div>
                         </div>
                     {% endfor %}
                 </div>
