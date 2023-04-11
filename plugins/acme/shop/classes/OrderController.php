@@ -69,18 +69,22 @@ class OrderController extends Controller
   {
 
     $rules = [
-      'user_name'  => 'required|min:4|max:50',
-      'user_phone' => 'required|min:11|max:50',
-      'user_subject' => 'required|min:11|max:50',
-      'user_mail'  => 'email',
-      'user_message' => 'max:500',
+        'user_name'  => 'required|min:3|max:50',
+        'user_phone' => 'required|min:12|max:50',
+        'user_subject' => 'required|min:11|max:50',
+        'user_mail'  => 'email',
+        'user_message' => 'max:500',
     ];
 
     $messages = [
-      'required' => 'Поле обязательно к заполнению!',
-      'min'      => 'Минимум :min символов!',
-      'max'      => 'Максимум :max символов!',
-    ];
+        'required'            => 'Поле обязательно к заполнению!',
+        'min'                 => 'Минимум :min символов!',
+        'max'                 => 'Максимум :max символов!',
+        'user_phone.required' => 'Укажите номер',
+        'user_name.required'  => 'Укажите имя',
+        'user_phone.min'      => 'Заполните номер',
+        'user_mail.email'     => 'Неверный email'
+      ];
 
     $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -97,7 +101,7 @@ class OrderController extends Controller
         $message->subject($vars['user_subject']);
       });
 
-      return response()->json(['status' => 'success', 'message' => 'Сообщение отправлено!']);
+      return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена, спасибо.']);
     }
   }
 

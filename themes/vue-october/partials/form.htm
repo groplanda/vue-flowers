@@ -1,0 +1,36 @@
+<form class="contact-form" data-js-action="send-form">
+    <p class="contact-form__title" data-modal="title">Получить прайс-лист</p>
+    <div class="contact-form__form-group">
+        <input
+            type="text"
+            placeholder="Ваше имя*"
+            class="contact-form__form-input"
+            name="user_name"
+        />
+        <span class="contact-form__error contact-form__error--user" data-error-for="user_name"></span>
+    </div>
+    <div class="contact-form__form-group">
+        <input
+            type="text"
+            placeholder="Ваш телефон*"
+            class="contact-form__form-input"
+            name="user_phone"
+            data-mask="phone"
+        />
+        <span class="contact-form__error contact-form__error--user" data-error-for="user_phone"></span>
+    </div>
+    <div class="contact-form__form-group">
+        <input
+            type="text"
+            placeholder="Ваш e-mail"
+            class="contact-form__form-input"
+            name="user_mail"
+        />
+        <span class="contact-form__error contact-form__error--user" data-error-for="user_mail"></span>
+    </div>
+    <button type="submit" class="contact-form__btn contact-form__btn--full">
+        Получить прайс-лист
+    </button>
+    <input type="hidden" value="Получить прайс-лист" name="user_subject" />
+    <div class="contact-form__status"></div>
+</form>

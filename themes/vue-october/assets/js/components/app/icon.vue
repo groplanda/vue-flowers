@@ -33,7 +33,7 @@ export default {
   }),
   computed: {
     filepath() {
-      const path = require(`@svg/${this.component}/${this.name}.svg`).default;
+      const path = require(`@svg/${this.component}/${this.name}.svg`);
       return '/themes/' + process.env.MIX_THEME + '/assets/' + path;
 
     },

@@ -6,6 +6,10 @@ function onStart()
     $styleAsset = 'assets/dist/index.css';
     $lastUpdate = filemtime($this->theme->getPath() . '/' . $styleAsset);
     $this['stylesheet'] = sprintf('%s?v=%s', $this->controller->themeUrl($styleAsset), $lastUpdate);
+
+    $scriptAsset = 'assets/dist/index.js';
+    $lastUpdate = filemtime($this->theme->getPath() . '/' . $scriptAsset);
+    $this['scripts'] = sprintf('%s?v=%s', $this->controller->themeUrl($scriptAsset), $lastUpdate);
 }
 ?>
 ==
@@ -27,8 +31,9 @@ function onStart()
     </head>
     <body>
         {% page %}
+        {% partial "modal" %}
         <!-- Scripts -->
-        <script src="{{ 'assets/dist/index.js'|theme }}"></script>
+        <script src="{{scripts}}"></script>
         {% scripts %}
     </body>
 </html>

@@ -9,7 +9,7 @@ Vue.component('icon', Icon);
 Vue.use(VueMask);
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.querySelector('[data-static-page]').remove();
+    document.querySelector('[data-static-page]').remove();
 })
 
 store.dispatch('init').then(() => {
