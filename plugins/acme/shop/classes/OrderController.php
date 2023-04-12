@@ -101,7 +101,11 @@ class OrderController extends Controller
         $message->subject($vars['user_subject']);
       });
 
-      return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена, спасибо.']);
+      $tg = $this->sendToTelegram($vars);
+
+      if ($tg) {
+        return response()->json(['status' => 'success', 'message' => 'Заявка успешно отправлена, спасибо.']);
+      }
     }
   }
 
@@ -143,5 +147,40 @@ class OrderController extends Controller
 
     $query = $data->save();
     return $query;
+  }
+
+  private function sendToTelegram($request)
+  {
+    $bot_token = '6016104833:AAGbbHID17SNom0OvKpJIYGworaPlTUhjQc';
+    $chat_id = '-1001888292514';
+
+    $fields = [
+      'user_name'     => 'Имя',
+      'user_phone'    => 'Телефон',
+      'user_mail'     => 'Email',
+      'user_message'  => 'Комментарий',
+      'user_subject'  => 'Тема письма'
+    ];
+
+    $message = '';
+
+    foreach ($request as $key => $value) {
+      $label = $fields[$key];
+      $text = !is_array($value) ? $value : implode(', ', $value);
+      if (isset($label)) {
+        $message .= "<b>".$label."</b>: ".$text. "\n";
+      }
+    }
+
+    $message = rawurlencode($message);
+
+    $request = "https://api.telegram.org/bot{$bot_token}/sendMessage?chat_id={$chat_id}&parse_mode=html&text={$message}";
+    $sendToTelegram = fopen($request,"r");
+
+    if ($sendToTelegram) {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
