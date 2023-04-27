@@ -38,6 +38,8 @@ export class ContactForm {
             this.modal.closeAllModals();
             this.modal.openModal(typeModal, data.message);
 
+            // eslint-disable-next-line no-undef
+            ym(93154317,'reachGoal','zaivka');
         })
         .catch(e => {
             console.log(e.message);
