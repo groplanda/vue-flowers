@@ -31,6 +31,26 @@
     <button type="submit" class="contact-form__btn contact-form__btn--full">
         Получить прайс-лист
     </button>
+    <label class="contact-form__checkbox">
+        <input type="checkbox" name="user_confirm" class="contact-form__checkbox-input" data-js="confirm-form" />
+        <span class="contact-form__checkbox-square">
+          <svg class="contact-form__checkbox-ico" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+          </svg>
+        </span>
+        <span class="contact-form__checkbox-text">
+          Согласен с
+          <a
+            href="#"
+            class="contact-form__checkbox-url"
+            data-js-action="open-modal"
+            data-name="privacy"
+            data-title="Политика конфиденциальности"
+          >
+          Политикой конфиденциальности.
+        </a>
+        </span>
+      </label>
     <input type="hidden" value="Получить прайс-лист" name="user_subject" />
     <div class="contact-form__status"></div>
 </form>

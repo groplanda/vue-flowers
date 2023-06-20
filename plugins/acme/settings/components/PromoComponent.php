@@ -23,6 +23,13 @@ class PromoComponent extends ComponentBase
                 'title'             => 'Выберите баннер',
                 'type'              => 'dropdown',
                 'default'           => 'us'
+            ],
+            'templateType' => [
+                'title'             => 'Внешний вид',
+                'type'              => 'dropdown',
+                'default'           => 'default',
+                'placeholder'       => 'Выберите тип',
+                'options'           => [ 'default' => 'По умолчанию', 'fixed' => 'С политикой конфиденциальности']
             ]
         ];
     }
@@ -30,6 +37,15 @@ class PromoComponent extends ComponentBase
     public function getBannerIdOptions()
     {
         return Promo::all()->lists('name', 'id');
+    }
+
+    public function onRender()
+    {
+        $view = $this->property('templateType');
+
+        if($view == 'fixed') {
+          return $this->renderPartial('@_fixed.htm');
+        }
     }
 
     public function onRun()

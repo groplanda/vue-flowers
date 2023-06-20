@@ -16,8 +16,12 @@ export class ContactForm {
         e.preventDefault();
         const formEl = e.target;
         const formData = this.prepareFormData(new FormData(formEl));
+        const submitEl = formEl.querySelector('button[type="submit"]');
         const path = formEl.dataset.path ? formEl.dataset.path : 'send-message';
+        const submitText = submitEl.textContent.trim();
         this.resetErrors(formData, formEl);
+        submitEl.disabled = true;
+        submitEl.textContent = 'Отправка формы...';
 
         fetch(`/api/${path}`, {
             method: 'POST',
@@ -26,6 +30,8 @@ export class ContactForm {
         .then(response => response.json())
         .then(data => {
 
+        submitEl.disabled = false
+        submitEl.textContent = submitText;
         if (data.status === "error") {
             const errors = this.onValidate(data, formData);
             this.handleErrors(errors, formEl);

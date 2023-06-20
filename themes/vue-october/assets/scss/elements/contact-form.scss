@@ -215,8 +215,16 @@
       width: 100%;
     }
 
-    &:hover, &:focus {
-      background: darken($color: $yellow, $amount: 10%);
+    &:hover:not([disabled]) {
+        background: darken($color: $yellow, $amount: 10%);
+    }
+
+    &[disabled] {
+        pointer-events: none;
+        cursor: not-allowed;
+        color: $primary;
+        background: lighten($color: $secondary, $amount: 15%);
+        box-shadow: none;
     }
   }
 
@@ -302,6 +310,105 @@
       margin-bottom: 15px;
     }
   }
+
+  &__checkbox {
+    display: flex;
+    position: relative;
+    cursor: pointer;
+    margin-top: 20px;
+
+    @media(min-width: 768px) {
+      align-items: center;
+    }
+
+  }
+
+  &__checkbox-input {
+    position: absolute;
+    z-index: 1;
+    visibility: hidden;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+
+    &:checked + {
+      #{$root} {
+        &__checkbox-square {
+          background: #fc0;
+          #{$root} {
+            &__checkbox-ico {
+              color: $primary;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  &__checkbox-square {
+    width: 16px;
+    height: 16px;
+    position: relative;
+    margin-right: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+    border-radius: 50%;
+    background: lighten($color: $secondary, $amount: 15%);
+
+    @media(min-width: 375px) {
+      margin-right: 16px;
+    }
+
+    @media(min-width: 768px) {
+      margin-top: 0;
+      width: 24px;
+      height: 24px;
+      margin-right: 10px;
+    }
+
+  }
+
+  &__checkbox-ico {
+    width: 12px;
+    height: 12px;
+    color: $primary;
+    transition: all .2s ease;
+
+    @media(min-width: 768px) {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &__checkbox-text {
+    flex: 1 1;
+    color: $primary;
+    font-size: 10px;
+    line-height: 20px;
+
+    @media(min-width: 375px) {
+      font-size: 12px;
+    }
+
+    @media(min-width: 768px) {
+      flex: 0 1 auto;
+      font-size: 14px;
+    }
+  }
+
+  &__checkbox-url {
+    color: $primary;
+    text-decoration: underline;
+
+    &:hover {
+      color: #fc0;
+      text-decoration: none;
+    }
+  }
+
 }
 .success {
   display: flex;

@@ -20,7 +20,7 @@ export class Modal {
     document.addEventListener("click", e => {
         const target = e.target;
 
-        if (target && target.dataset.jsAction === 'open-modal' && target.tagName.toLowerCase() === 'button') {
+        if (target && target.dataset.jsAction === 'open-modal' && (target.tagName.toLowerCase() === 'button' || target.tagName.toLowerCase() === 'a')) {
             this.hadleClick(e);
         }
     })
